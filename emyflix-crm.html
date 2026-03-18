@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmyFlix CRM — Gestão de Clientes</title>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#04080f;--bg1:#070d1a;--bg2:#0a1225;--bg3:#0d1830;
+  --blue:#00aaff;--cyan:#00e5ff;--green:#00e676;--amber:#ffab00;--red:#ff5252;--purple:#a78bfa;
+  --text:#c8e6ff;--text2:#5a8ab8;--text3:#1e3a5a;
+  --border:#0d2a4a;--border2:#1a4a7a;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg0);font-family:'Oxanium',sans-serif;color:var(--text);display:flex}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,170,255,.01) 3px,rgba(0,170,255,.01) 4px);pointer-events:none;z-index:0}
+
+/* SIDEBAR */
+.sidebar{width:54px;min-height:100vh;background:var(--bg1);border-right:0.5px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px;z-index:100;flex-shrink:0}
+.logo-box{width:36px;height:36px;border-radius:8px;background:#050e1f;border:1px solid rgba(0,170,255,.35);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:11px;font-weight:800;color:var(--cyan);letter-spacing:.04em;cursor:pointer}
+.nb{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;border:0.5px solid transparent;color:var(--text3);position:relative}
+.nb:hover,.nb.on{background:rgba(0,170,255,.1);border-color:rgba(0,170,255,.25);color:var(--blue)}
+.nb svg{width:15px;height:15px}
+.nb .tip{position:absolute;left:46px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;letter-spacing:.04em;z-index:200}
+.nb:hover .tip{opacity:1}
+
+/* MAIN */
+.content{flex:1;overflow-y:auto;position:relative;z-index:1}
+.page{display:none;padding:14px 16px;min-height:100vh}
+.page.active{display:block}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:0.5px solid var(--border)}
+.brand-name{font-size:16px;font-weight:800;background:linear-gradient(90deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.08em}
+.brand-sub{font-size:9px;color:var(--text3);letter-spacing:.14em;font-weight:500;margin-top:1px}
+.page-title{font-size:16px;font-weight:800;color:var(--text);letter-spacing:.06em}
+.page-sub{font-size:10px;color:var(--text3);letter-spacing:.1em;margin-top:1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.live{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--green);letter-spacing:.08em;padding:4px 10px;border-radius:20px;border:0.5px solid rgba(0,230,118,.2);background:rgba(0,230,118,.04);font-weight:600}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.6s infinite}
+.datechip{font-size:10px;color:var(--text3);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);font-weight:500;letter-spacing:.04em}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#002a5a,#0055aa);border:1px solid rgba(0,170,255,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--cyan);letter-spacing:.04em}
+
+/* GRIDS */
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:9px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:9px}
+.g2{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:8px;margin-bottom:9px}
+.g2e{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
+
+/* CARDS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--bg1);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;animation:fadeUp .4s ease both}
+.sc:hover{border-color:var(--border2)}
+.sc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px}
+.sc.bl::after{background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+.sc.cy::after{background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.sc.gr::after{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.sc.am::after{background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+.sc.re::after{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.sc.pu::after{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+.sl{font-size:9px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;font-weight:600}
+.sv{font-size:28px;font-weight:800;line-height:1;margin-bottom:3px;letter-spacing:-.01em}
+.ss{font-size:11px;color:var(--text3);font-weight:400}
+.sbar{height:2px;border-radius:1px;margin-top:8px;background:var(--bg3)}
+.sbf{height:100%;border-radius:1px;transition:width 1s ease}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.st{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.1em;display:flex;align-items:center;gap:6px}
+.st::before{content:'';width:2px;height:11px;background:var(--blue);border-radius:2px;display:block}
+
+/* TABLE */
+.trow{display:grid;padding:7px 8px;border-radius:6px;font-size:12px;color:var(--text2);align-items:center;gap:6px;transition:background .15s;font-weight:500}
+.trow:hover{background:rgba(0,170,255,.04)}
+.th{font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;border-bottom:0.5px solid var(--border);padding-bottom:7px;margin-bottom:3px;font-weight:700}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em}
+.ttv{background:rgba(0,170,255,.1);color:var(--blue);border:0.5px solid rgba(0,170,255,.3)}
+.tnet{background:rgba(0,229,255,.08);color:var(--cyan);border:0.5px solid rgba(0,229,255,.25)}
+.tok{background:rgba(0,230,118,.07);color:var(--green);border:0.5px solid rgba(0,230,118,.2)}
+.twarn{background:rgba(255,171,0,.08);color:var(--amber);border:0.5px solid rgba(255,171,0,.25)}
+.tbad{background:rgba(255,82,82,.08);color:var(--red);border:0.5px solid rgba(255,82,82,.2)}
+
+/* BUTTONS */
+.btn{font-family:'Oxanium',sans-serif;font-size:10px;letter-spacing:.07em;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:700;transition:all .18s;border:0.5px solid}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.btn-blue{background:rgba(0,170,255,.1);color:var(--blue);border-color:rgba(0,170,255,.35)}
+.btn-cyan{background:rgba(0,229,255,.07);color:var(--cyan);border-color:rgba(0,229,255,.25)}
+.btn-green{background:rgba(0,230,118,.07);color:var(--green);border-color:rgba(0,230,118,.25)}
+.btn-red{background:rgba(255,82,82,.07);color:var(--red);border-color:rgba(255,82,82,.25)}
+.btn-amber{background:rgba(255,171,0,.08);color:var(--amber);border-color:rgba(255,171,0,.3)}
+.btn-ghost{background:transparent;color:var(--text3);border-color:var(--border2)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+
+/* FILTER BTNS */
+.fb{padding:3px 10px;border-radius:20px;font-size:9px;cursor:pointer;border:0.5px solid var(--border2);background:transparent;color:var(--text3);font-family:'Oxanium',sans-serif;letter-spacing:.06em;font-weight:600;transition:all .15s}
+.fb:hover,.fb.sel{border-color:rgba(0,170,255,.4);color:var(--blue);background:rgba(0,170,255,.07)}
+
+/* FORM */
+.form-group{margin-bottom:14px}
+.form-label{font-size:10px;color:var(--text2);letter-spacing:.1em;font-weight:700;margin-bottom:6px;display:block;text-transform:uppercase}
+.form-input{width:100%;background:var(--bg2);border:0.5px solid var(--border2);border-radius:8px;padding:10px 14px;font-family:'Oxanium',sans-serif;font-size:13px;color:var(--text);font-weight:500;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--blue)}
+.form-input::placeholder{color:var(--text3)}
+select.form-input option{background:var(--bg2);color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* TOGGLE */
+.tog{position:relative;width:40px;height:22px;display:inline-block;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-track{position:absolute;inset:0;border-radius:11px;background:var(--bg3);border:0.5px solid var(--border2);transition:all .2s;cursor:pointer}
+.tog.on .tog-track{background:rgba(0,170,255,.2);border-color:var(--blue)}
+.tog-knob{position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:var(--text3);transition:all .2s;pointer-events:none}
+.tog.on .tog-knob{transform:translateX(18px);background:var(--blue)}
+
+/* NOTIFICATION ROW */
+.nr{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:0.5px solid var(--border)}
+.nr:last-child{border-bottom:none}
+.nd{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.nt{font-size:12px;color:var(--text2);line-height:1.4;font-weight:400}
+.ntm{font-size:9px;color:var(--text3);margin-top:2px;font-weight:600;letter-spacing:.06em}
+
+/* NOTIF CONFIG ROW */
+.ncrow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border)}
+.ncrow:last-child{border-bottom:none}
+.nc-info{flex:1}
+.nc-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.nc-desc{font-size:11px;color:var(--text3);line-height:1.5}
+.nc-msg{background:var(--bg2);border-radius:6px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--text2);line-height:1.5;border-left:2px solid var(--blue)}
+
+/* SCROLLBAR */
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-track{background:var(--bg0)}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg1);border:0.5px solid var(--border2);border-radius:14px;padding:24px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;position:relative}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);border-radius:14px 14px 0 0}
+.modal-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:.06em;margin-bottom:18px}
+.modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:18px;font-family:'Oxanium',sans-serif;transition:color .15s}
+.modal-close:hover{color:var(--red)}
+
+/* BADGE SERV */
+.bserv{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-right:4px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo-box" onclick="goPage('dashboard')">EF</div>
+  <div class="nb on" id="nb-dashboard" onclick="goPage('dashboard')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span class="tip">DASHBOARD</span>
+  </div>
+  <div class="nb" id="nb-clientes" onclick="goPage('clientes')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75M21 21v-2a4 4 0 00-3-3.87"/></svg>
+    <span class="tip">CLIENTES</span>
+  </div>
+  <div class="nb" id="nb-notificacoes" onclick="goPage('notificacoes')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <span class="tip">NOTIFICAÇÕES</span>
+  </div>
+  <div class="nb" id="nb-servicos" onclick="goPage('servicos')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4 4-4-4"/></svg>
+    <span class="tip">SERVIÇOS</span>
+  </div>
+  <div class="nb" id="nb-relatorios" onclick="goPage('relatorios')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <span class="tip">RELATÓRIOS</span>
+  </div>
+  <div style="flex:1"></div>
+  <div class="nb" id="nb-config" onclick="goPage('config')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    <span class="tip">CONFIG</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ===== DASHBOARD ===== -->
+<div class="page active" id="page-dashboard">
+  <div class="topbar">
+    <div><div class="brand-name">EMYFLIX CRM</div><div class="brand-sub">GESTÃO DE CLIENTES</div></div>
+    <div style="display:flex;align-items:center;gap:9px">
+      <div class="live"><span class="live-dot"></span>AO VIVO</div>
+      <div class="datechip" id="clock">17/03/2026</div>
+      <div class="avatar">AD</div>
+    </div>
+  </div>
+  <div class="g4">
+    <div class="sc bl"><div class="sl">Clientes ativos</div><div class="sv" style="color:var(--blue)">29</div><div class="ss">+3 este mês</div><div class="sbar"><div class="sbf" style="width:86%;background:var(--blue)"></div></div></div>
+    <div class="sc cy" style="animation-delay:.06s"><div class="sl">TV — ativos</div><div class="sv" style="color:var(--cyan)">18</div><div class="ss">Canais de TV</div><div class="sbar"><div class="sbf" style="width:62%;background:var(--cyan)"></div></div></div>
+    <div class="sc gr" style="animation-delay:.12s"><div class="sl">Internet — ativos</div><div class="sv" style="color:var(--green)">11</div><div class="ss">Fibra / Net</div><div class="sbar"><div class="sbf" style="width:38%;background:var(--green)"></div></div></div>
+    <div class="sc am" style="animation-delay:.18s"><div class="sl">Vencendo 7 dias</div><div class="sv" style="color:var(--amber)">4</div><div class="ss">3 TV · 1 Net</div><div class="sbar"><div class="sbf" style="width:22%;background:var(--amber)"></div></div></div>
+  </div>
+  <div class="g4">
+    <div class="sc pu" style="animation-delay:.06s"><div class="sl">Receita mensal</div><div class="sv" style="color:var(--purple);font-size:20px">R$4.750</div><div class="ss">MRR estimado</div><div class="sbar"><div class="sbf" style="width:70%;background:var(--purple)"></div></div></div>
+    <div class="sc re" style="animation-delay:.12s"><div class="sl">Inativos</div><div class="sv" style="color:var(--red)">4</div><div class="ss">−1 vs anterior</div><div class="sbar"><div class="sbf" style="width:14%;background:var(--red)"></div></div></div>
+    <div class="sc cy" style="animation-delay:.18s"><div class="sl">WhatsApp — 30d</div><div class="sv" style="color:var(--cyan);font-size:20px">47</div><div class="ss">94% entregues</div><div class="sbar"><div class="sbf" style="width:94%;background:var(--cyan)"></div></div></div>
+    <div class="sc bl" style="animation-delay:.24s"><div class="sl">Ticket médio</div><div class="sv" style="color:var(--blue);font-size:20px">R$163</div><div class="ss">por cliente</div><div class="sbar"><div class="sbf" style="width:54%;background:var(--blue)"></div></div></div>
+  </div>
+  <div class="g2">
+    <div class="sc" style="padding:14px;animation-delay:.1s">
+      <div class="sh">
+        <div class="st">Adesões por mês</div>
+        <div style="display:flex;gap:10px">
+          <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--blue);font-weight:700;letter-spacing:.06em"><span style="width:10px;height:2px;background:var(--blue);border-radius:1px;display:inline-block"></span>TV</span>
+          <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:.06em"><span style="width:10px;height:2px;background:var(--cyan);border-radius:1px;display:inline-block"></span>NET</span>
+        </div>
+      </div>
+      <div style="position:relative;height:130px"><canvas id="cLine"></canvas></div>
+    </div>
+    <div class="sc" style="padding:14px;animation-delay:.15s">
+      <div class="sh"><div class="st">Por serviço</div></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="position:relative;height:105px;width:105px;flex-shrink:0"><canvas id="cDona"></canvas></div>
+        <div style="font-size:11px;display:flex;flex-direction:column;gap:8px;font-weight:500">
+          <span style="display:flex;align-items:center;gap:7px;color:var(--text2)"><span style="width:7px;height:7px;border-radius:2px;background:var(--blue);display:inline-block;flex-shrink:0"></span>TV Básico <span style="color:var(--blue)">8</span></span>
+          <span style="display:flex;align-items:center;gap:7px;color:var(--text2)"><span style="width:7px;height:7px;border-radius:2px;background:var(--cyan);display:inline-block;flex-shrink:0"></span>TV Premium <span style="color:var(--cyan)">10</span></span>
+          <span style="display:flex;align-items:center;gap:7px;color:var(--text2)"><span style="width:7px;height:7px;border-radius:2px;background:var(--green);display:inline-block;flex-shrink:0"></span>Internet <span style="color:var(--green)">11</span></span>
+          <span style="display:flex;align-items:center;gap:7px;color:var(--text2)"><span style="width:7px;height:7px;border-radius:2px;background:var(--red);display:inline-block;flex-shrink:0"></span>Inativo <span style="color:var(--red)">4</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sc" style="padding:14px;margin-bottom:9px;animation-delay:.2s">
+    <div class="sh">
+      <div class="st">Próximos vencimentos</div>
+      <div style="display:flex;gap:5px">
+        <button class="fb sel" onclick="ftD('all',this)">TODOS</button>
+        <button class="fb" onclick="ftD('tv',this)">TV</button>
+        <button class="fb" onclick="ftD('net',this)">NET</button>
+      </div>
+    </div>
+    <div class="trow th" style="grid-template-columns:1fr 70px 90px 70px 55px 65px">
+      <span>Cliente</span><span>Serviço</span><span>Plano</span><span>Valor</span><span>Vence</span><span>Status</span>
+    </div>
+    <div id="dash-tbody"></div>
+  </div>
+  <div class="g2" style="margin-bottom:9px">
+    <div class="sc" style="padding:14px;animation-delay:.25s">
+      <div class="sh"><div class="st">WhatsApp — 30 dias</div><span style="font-size:9px;color:var(--green);font-weight:700;letter-spacing:.08em">94% ENTREGUES</span></div>
+      <div style="position:relative;height:65px"><canvas id="cBar"></canvas></div>
+    </div>
+    <div class="sc" style="padding:14px;animation-delay:.3s">
+      <div class="sh"><div class="st">Alertas recentes</div></div>
+      <div class="nr"><span class="nd" style="background:var(--amber)"></span><div><div class="nt">Carlos Silva — TV Premium vence em <span style="color:var(--amber);font-weight:700">3 dias</span></div><div class="ntm">HOJE · 10:05</div></div></div>
+      <div class="nr"><span class="nd" style="background:var(--amber)"></span><div><div class="nt">Roberto Nunes — TV Básico vence em <span style="color:var(--amber);font-weight:700">5 dias</span></div><div class="ntm">HOJE · 10:05</div></div></div>
+      <div class="nr"><span class="nd" style="background:var(--blue)"></span><div><div class="nt">Ana Souza — Internet vence em <span style="color:var(--blue);font-weight:700">7 dias</span></div><div class="ntm">HOJE · 09:30</div></div></div>
+      <div class="nr"><span class="nd" style="background:var(--red)"></span><div><div class="nt">Juliana Costa — <span style="color:var(--red);font-weight:700">Vencido há 5 dias</span></div><div class="ntm">12/03 · 08:00</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CLIENTES ===== -->
+<div class="page" id="page-clientes">
+  <div class="topbar">
+    <div><div class="page-title">CLIENTES</div><div class="page-sub">GESTÃO E CONTROLE</div></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <input class="form-input" style="width:200px;padding:7px 12px;font-size:11px" placeholder="Buscar cliente..." oninput="buscarCliente(this.value)">
+      <button class="btn btn-blue" onclick="openModal('modal-cadastro')">+ NOVO CLIENTE</button>
+    </div>
+  </div>
+  <div class="g4" style="margin-bottom:12px">
+    <div class="sc bl"><div class="sl">Total</div><div class="sv" style="color:var(--blue)">29</div><div class="ss">Todos os clientes</div></div>
+    <div class="sc gr" style="animation-delay:.06s"><div class="sl">Ativos</div><div class="sv" style="color:var(--green)">25</div><div class="ss">Em dia</div></div>
+    <div class="sc am" style="animation-delay:.12s"><div class="sl">Vencendo</div><div class="sv" style="color:var(--amber)">4</div><div class="ss">Próximos 7 dias</div></div>
+    <div class="sc re" style="animation-delay:.18s"><div class="sl">Inativos</div><div class="sv" style="color:var(--red)">4</div><div class="ss">Plano vencido</div></div>
+  </div>
+  <div class="sc" style="padding:14px;animation-delay:.1s">
+    <div class="sh">
+      <div class="st">Lista de clientes</div>
+      <div style="display:flex;gap:5px">
+        <button class="fb sel" onclick="ftC('all',this)">TODOS</button>
+        <button class="fb" onclick="ftC('tv',this)">TV</button>
+        <button class="fb" onclick="ftC('net',this)">NET</button>
+        <button class="fb" onclick="ftC('warn',this)">VENCENDO</button>
+        <button class="fb" onclick="ftC('bad',this)">INATIVOS</button>
+      </div>
+    </div>
+    <div class="trow th" style="grid-template-columns:1fr 70px 90px 80px 70px 60px 80px">
+      <span>Cliente</span><span>Serviço</span><span>Plano</span><span>WhatsApp</span><span>Valor</span><span>Vence</span><span>Ação</span>
+    </div>
+    <div id="cli-tbody"></div>
+  </div>
+</div>
+
+<!-- ===== NOTIFICAÇÕES ===== -->
+<div class="page" id="page-notificacoes">
+  <div class="topbar">
+    <div><div class="page-title">NOTIFICAÇÕES</div><div class="page-sub">CONFIGURAR ALERTAS AUTOMÁTICOS</div></div>
+    <button class="btn btn-blue" onclick="alert('Configurações salvas!')">SALVAR TUDO</button>
+  </div>
+  <div class="g2e">
+    <!-- Seus alertas -->
+    <div class="sc bl" style="padding:16px;animation-delay:.05s">
+      <div class="sh"><div class="st">Seus alertas (dono)</div></div>
+      <div class="ncrow">
+        <div class="nc-info">
+          <div class="nc-title">7 dias antes — você recebe</div>
+          <div class="nc-msg">⚠️ [TV] <strong>Carlos Silva</strong> vence em 7 dias — R$299 — (11) 99999-0001</div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <span class="tag ttv" style="cursor:pointer">WhatsApp</span>
+            <span class="tag tok" style="cursor:pointer">Push</span>
+          </div>
+        </div>
+        <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+      </div>
+      <div class="ncrow">
+        <div class="nc-info">
+          <div class="nc-title">3 dias antes — você recebe</div>
+          <div class="nc-msg">⚠️ [TV] <strong>Carlos Silva</strong> vence em 3 dias — R$299 — (11) 99999-0001</div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <span class="tag ttv" style="cursor:pointer">WhatsApp</span>
+            <span class="tag tok" style="cursor:pointer">Push</span>
+          </div>
+        </div>
+        <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+      </div>
+      <div class="ncrow">
+        <div class="nc-info">
+          <div class="nc-title">Dia do vencimento — você recebe</div>
+          <div class="nc-msg">🚨 [TV] <strong>Carlos Silva</strong> vence HOJE — R$299</div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <span class="tag ttv" style="cursor:pointer">WhatsApp</span>
+            <span class="tag tok" style="cursor:pointer">Push</span>
+            <span class="tag tnet" style="cursor:pointer">E-mail</span>
+          </div>
+        </div>
+        <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+      </div>
+      <div class="ncrow">
+        <div class="nc-info">
+          <div class="nc-title">Após vencimento (+1 dia)</div>
+          <div class="nc-msg">🔴 [TV] <strong>Carlos Silva</strong> VENCIDO há 1 dia — R$299</div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <span class="tag ttv" style="cursor:pointer">WhatsApp</span>
+            <span class="tag tnet" style="cursor:pointer">E-mail</span>
+          </div>
+        </div>
+        <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+      </div>
+      <div class="ncrow">
+        <div class="nc-info">
+          <div class="nc-title">Resumo diário — vencimentos futuros</div>
+          <div class="nc-desc">Receba toda manhã a lista de quem vence nos próximos 7 dias</div>
+        </div>
+        <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+      </div>
+    </div>
+    <!-- Alertas clientes -->
+    <div>
+      <div class="sc cy" style="padding:16px;margin-bottom:9px;animation-delay:.1s">
+        <div class="sh"><div class="st">Alertas para clientes</div></div>
+        <div class="ncrow">
+          <div class="nc-info">
+            <div class="nc-title">Boas-vindas (novo cliente)</div>
+            <div class="nc-msg">Olá <strong>{nome}</strong>! Bem-vindo à EmyFlix. Seu plano de <strong>{servico}</strong> está ativo até {data}.</div>
+          </div>
+          <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+        </div>
+        <div class="ncrow">
+          <div class="nc-info">
+            <div class="nc-title">Lembrete 7 dias antes</div>
+            <div class="nc-msg">Olá <strong>{nome}</strong>! Seu plano de <strong>{servico}</strong> vence em 7 dias ({data}). Renove agora!</div>
+          </div>
+          <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+        </div>
+        <div class="ncrow">
+          <div class="nc-info">
+            <div class="nc-title">Lembrete 3 dias antes</div>
+            <div class="nc-msg">Atenção <strong>{nome}</strong>! Seu plano de <strong>{servico}</strong> vence em 3 dias. Não fique sem sinal!</div>
+          </div>
+          <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+        </div>
+        <div class="ncrow">
+          <div class="nc-info">
+            <div class="nc-title">Dia do vencimento</div>
+            <div class="nc-msg"><strong>{nome}</strong>, hoje é o último dia do seu plano de <strong>{servico}</strong>. Renove agora para não perder!</div>
+          </div>
+          <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+        </div>
+        <div class="ncrow">
+          <div class="nc-info">
+            <div class="nc-title">Confirmação de pagamento</div>
+            <div class="nc-msg">✅ <strong>{nome}</strong>, seu pagamento foi confirmado! Plano ativo até {nova_data}.</div>
+          </div>
+          <div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div>
+        </div>
+      </div>
+      <div class="sc" style="padding:16px;animation-delay:.15s">
+        <div class="sh"><div class="st">Horário de envio</div></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <select class="form-input" style="width:100px;padding:7px 10px;font-size:12px">
+            <option>08:00</option><option>09:00</option><option selected>10:00</option><option>11:00</option>
+          </select>
+          <span style="font-size:12px;color:var(--text3)">até</span>
+          <select class="form-input" style="width:100px;padding:7px 10px;font-size:12px">
+            <option>17:00</option><option selected>18:00</option><option>19:00</option><option>20:00</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <button class="fb sel" onclick="this.classList.toggle('sel')">SEG</button>
+          <button class="fb sel" onclick="this.classList.toggle('sel')">TER</button>
+          <button class="fb sel" onclick="this.classList.toggle('sel')">QUA</button>
+          <button class="fb sel" onclick="this.classList.toggle('sel')">QUI</button>
+          <button class="fb sel" onclick="this.classList.toggle('sel')">SEX</button>
+          <button class="fb" onclick="this.classList.toggle('sel')">SAB</button>
+          <button class="fb" onclick="this.classList.toggle('sel')">DOM</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Preview mensagens -->
+  <div class="g2e">
+    <div class="sc" style="padding:14px;animation-delay:.2s">
+      <div class="sh"><div class="st">Preview — mensagem para você</div></div>
+      <div style="background:#050e1f;border-radius:10px;padding:12px">
+        <div style="background:rgba(0,170,255,.1);border-radius:10px 10px 10px 2px;padding:10px 14px;border:0.5px solid rgba(0,170,255,.2)">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:700">EMYFLIX CRM</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">⚠️ [TV] <strong style="color:var(--cyan)">Carlos Silva</strong> vence em <strong style="color:var(--amber)">3 dias</strong><br>Plano: TV Premium — R$ 299,00<br>Venc: 20/03/2026 · Tel: (11) 99999-0001</div>
+        </div>
+        <div style="font-size:10px;color:var(--text3);text-align:right;margin-top:4px;font-weight:600">10:05 ✓✓</div>
+      </div>
+    </div>
+    <div class="sc" style="padding:14px;animation-delay:.25s">
+      <div class="sh"><div class="st">Preview — mensagem para o cliente</div></div>
+      <div style="background:#050e1f;border-radius:10px;padding:12px">
+        <div style="background:rgba(0,229,255,.08);border-radius:10px 10px 10px 2px;padding:10px 14px;border:0.5px solid rgba(0,229,255,.15)">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:700">EMYFLIX — CANAIS DE TV</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">Olá <strong style="color:var(--cyan)">Carlos Silva</strong>! Seu plano de <strong>Canais de TV</strong> vence em <strong style="color:var(--amber)">3 dias</strong> (20/03).<br><br>Não fique sem seus canais! Renove agora.<br><span style="color:var(--blue)">Valor: R$ 299,00</span></div>
+        </div>
+        <div style="font-size:10px;color:var(--text3);text-align:right;margin-top:4px;font-weight:600">10:05 ✓✓</div>
+      </div>
+    </div>
+  </div>
+  <div class="sc" style="padding:14px;animation-delay:.3s">
+    <div class="sh"><div class="st">Seu número WhatsApp para alertas</div></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <input class="form-input" style="max-width:240px" placeholder="+55 11 99999-9999" value="+55 11 98888-0000">
+      <button class="btn btn-green">VERIFICAR</button>
+      <span style="font-size:11px;color:var(--green);font-weight:600">✓ CONECTADO</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SERVIÇOS ===== -->
+<div class="page" id="page-servicos">
+  <div class="topbar">
+    <div><div class="page-title">SERVIÇOS</div><div class="page-sub">TV E INTERNET — PLANOS E PREÇOS</div></div>
+    <button class="btn btn-blue" onclick="alert('Novo serviço em breve!')">+ NOVO SERVIÇO</button>
+  </div>
+  <div class="g2e">
+    <div class="sc bl" style="padding:16px;animation-delay:.05s">
+      <div class="sh">
+        <div class="st">Canais de TV</div>
+        <span class="tag ttv">18 ATIVOS</span>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div><div style="font-size:13px;font-weight:700;color:var(--text)">TV Básico</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Pacote padrão de canais</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:800;color:var(--blue)">R$59</div><div style="font-size:10px;color:var(--text3)">8 clientes</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div><div style="font-size:13px;font-weight:700;color:var(--text)">TV Premium</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Todos os canais + HBO</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:800;color:var(--cyan)">R$299</div><div style="font-size:10px;color:var(--text3)">10 clientes</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0">
+          <div><div style="font-size:13px;font-weight:700;color:var(--text)">TV Família</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Canais infantis + adultos</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:800;color:var(--blue)">R$129</div><div style="font-size:10px;color:var(--text3)">0 clientes</div></div>
+        </div>
+      </div>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;display:flex">EDITAR PLANOS TV</button>
+    </div>
+    <div class="sc cy" style="padding:16px;animation-delay:.1s">
+      <div class="sh">
+        <div class="st">Internet / Fibra</div>
+        <span class="tag tnet">11 ATIVOS</span>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div><div style="font-size:13px;font-weight:700;color:var(--text)">Fibra 50M</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Internet 50 Mbps</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:800;color:var(--cyan)">R$69</div><div style="font-size:10px;color:var(--text3)">4 clientes</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div><div style="font-size:13px;font-weight:700;color:var(--text)">Fibra 100M</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Internet 100 Mbps</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:800;color:var(--green)">R$89</div><div style="font-size:10px;color:var(--text3)">5 clientes</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0">
+          <div><div style="font-size:13px;font-weight:700;color:var(--text)">Fibra 300M</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Internet 300 Mbps</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:800;color:var(--cyan)">R$149</div><div style="font-size:10px;color:var(--text3)">2 clientes</div></div>
+        </div>
+      </div>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;display:flex">EDITAR PLANOS NET</button>
+    </div>
+  </div>
+  <div class="sc" style="padding:14px;animation-delay:.15s">
+    <div class="sh"><div class="st">Receita por serviço</div></div>
+    <div style="position:relative;height:120px"><canvas id="cServ"></canvas></div>
+  </div>
+</div>
+
+<!-- ===== RELATÓRIOS ===== -->
+<div class="page" id="page-relatorios">
+  <div class="topbar">
+    <div><div class="page-title">RELATÓRIOS</div><div class="page-sub">ANÁLISE E DESEMPENHO</div></div>
+    <div style="display:flex;gap:8px">
+      <select class="form-input" style="width:120px;padding:7px 10px;font-size:11px">
+        <option>Março 2026</option><option>Fevereiro 2026</option><option>Janeiro 2026</option>
+      </select>
+      <button class="btn btn-ghost">EXPORTAR</button>
+    </div>
+  </div>
+  <div class="g4">
+    <div class="sc gr"><div class="sl">Receita março</div><div class="sv" style="color:var(--green);font-size:22px">R$4.750</div><div class="ss" style="color:var(--green)">+12% vs fev</div></div>
+    <div class="sc bl" style="animation-delay:.06s"><div class="sl">Novos clientes</div><div class="sv" style="color:var(--blue)">3</div><div class="ss">Este mês</div></div>
+    <div class="sc re" style="animation-delay:.12s"><div class="sl">Churn</div><div class="sv" style="color:var(--red)">1</div><div class="ss">Cancelou este mês</div></div>
+    <div class="sc am" style="animation-delay:.18s"><div class="sl">Taxa retenção</div><div class="sv" style="color:var(--amber)">96%</div><div class="ss">Clientes mantidos</div></div>
+  </div>
+  <div class="g2">
+    <div class="sc" style="padding:14px;animation-delay:.1s">
+      <div class="sh"><div class="st">Receita mensal — 12 meses</div></div>
+      <div style="position:relative;height:140px"><canvas id="cRec"></canvas></div>
+    </div>
+    <div class="sc" style="padding:14px;animation-delay:.15s">
+      <div class="sh"><div class="st">Mensagens WhatsApp</div></div>
+      <div class="g2e" style="margin-bottom:10px;gap:6px">
+        <div style="background:var(--bg2);border-radius:8px;padding:10px;text-align:center;border:0.5px solid var(--border)">
+          <div style="font-size:20px;font-weight:800;color:var(--green)">47</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;font-weight:600;letter-spacing:.06em">ENVIADAS</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:10px;text-align:center;border:0.5px solid var(--border)">
+          <div style="font-size:20px;font-weight:800;color:var(--blue)">44</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;font-weight:600;letter-spacing:.06em">ENTREGUES</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:10px;text-align:center;border:0.5px solid var(--border)">
+          <div style="font-size:20px;font-weight:800;color:var(--cyan)">94%</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;font-weight:600;letter-spacing:.06em">TAXA ENTREGA</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:10px;text-align:center;border:0.5px solid var(--border)">
+          <div style="font-size:20px;font-weight:800;color:var(--amber)">3</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;font-weight:600;letter-spacing:.06em">FALHAS</div>
+        </div>
+      </div>
+      <div style="position:relative;height:60px"><canvas id="cWpp"></canvas></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="sc" style="padding:14px;animation-delay:.2s">
+      <div class="sh"><div class="st">Clientes por plano</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:4px"><span style="color:var(--text2)">TV Básico</span><span style="color:var(--blue)">8</span></div><div class="sbar"><div class="sbf" style="width:28%;background:var(--blue)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:4px"><span style="color:var(--text2)">TV Premium</span><span style="color:var(--cyan)">10</span></div><div class="sbar"><div class="sbf" style="width:34%;background:var(--cyan)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:4px"><span style="color:var(--text2)">Fibra 50M</span><span style="color:var(--green)">4</span></div><div class="sbar"><div class="sbf" style="width:14%;background:var(--green)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:4px"><span style="color:var(--text2)">Fibra 100M</span><span style="color:var(--green)">5</span></div><div class="sbar"><div class="sbf" style="width:17%;background:var(--green)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:4px"><span style="color:var(--text2)">Fibra 300M</span><span style="color:var(--cyan)">2</span></div><div class="sbar"><div class="sbf" style="width:7%;background:var(--cyan)"></div></div></div>
+      </div>
+    </div>
+    <div class="sc" style="padding:14px;animation-delay:.25s">
+      <div class="sh"><div class="st">Vencimentos este mês</div></div>
+      <div style="position:relative;height:130px"><canvas id="cVenc"></canvas></div>
+    </div>
+    <div class="sc" style="padding:14px;animation-delay:.3s">
+      <div class="sh"><div class="st">Receita TV vs Internet</div></div>
+      <div style="position:relative;height:130px"><canvas id="cPie"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIG ===== -->
+<div class="page" id="page-config">
+  <div class="topbar">
+    <div><div class="page-title">CONFIGURAÇÕES</div><div class="page-sub">SISTEMA E CONTA</div></div>
+    <button class="btn btn-blue" onclick="alert('Configurações salvas!')">SALVAR</button>
+  </div>
+  <div class="g2e">
+    <div class="sc" style="padding:16px;animation-delay:.05s">
+      <div class="sh"><div class="st">Dados da empresa</div></div>
+      <div class="form-group"><label class="form-label">Nome da empresa</label><input class="form-input" value="EmyFlix"></div>
+      <div class="form-group"><label class="form-label">WhatsApp do dono</label><input class="form-input" value="+55 11 98888-0000"></div>
+      <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" value="admin@emyflix.com"></div>
+      <div class="form-group"><label class="form-label">Chave API Evolution (WhatsApp)</label><input class="form-input" value="evo_xxxxxxxxxxxxxxxxxxxx" type="password"></div>
+    </div>
+    <div class="sc" style="padding:16px;animation-delay:.1s">
+      <div class="sh"><div class="st">Segurança</div></div>
+      <div class="form-group"><label class="form-label">Usuário admin</label><input class="form-input" value="admin"></div>
+      <div class="form-group"><label class="form-label">Senha atual</label><input class="form-input" type="password" placeholder="••••••••"></div>
+      <div class="form-group"><label class="form-label">Nova senha</label><input class="form-input" type="password" placeholder="••••••••"></div>
+      <div class="form-group"><label class="form-label">Confirmar nova senha</label><input class="form-input" type="password" placeholder="••••••••"></div>
+      <button class="btn btn-amber" style="width:100%;display:flex;justify-content:center">ALTERAR SENHA</button>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="sc" style="padding:16px;animation-delay:.15s">
+      <div class="sh"><div class="st">Integrações</div></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">Evolution API</div><div class="nc-desc">WhatsApp conectado e ativo</div></div><span class="tag tok">ATIVO</span></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">n8n Automação</div><div class="nc-desc">Workflows de notificação</div></div><span class="tag tok">ATIVO</span></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">PostgreSQL</div><div class="nc-desc">Banco de dados conectado</div></div><span class="tag tok">ATIVO</span></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">Push Notifications</div><div class="nc-desc">Alertas no celular</div></div><span class="tag twarn">CONFIGURAR</span></div>
+    </div>
+    <div class="sc" style="padding:16px;animation-delay:.2s">
+      <div class="sh"><div class="st">Preferências</div></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">Modo escuro</div><div class="nc-desc">Tema dark (padrão)</div></div><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">Sons de alerta</div><div class="nc-desc">Notificações com som</div></div><div class="tog" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">Alerta no navegador</div><div class="nc-desc">Push pelo browser</div></div><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div></div>
+      <div class="ncrow"><div class="nc-info"><div class="nc-title">Relatório semanal por e-mail</div><div class="nc-desc">Resumo toda segunda-feira</div></div><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-track"></div><div class="tog-knob"></div></div></div>
+    </div>
+    <div class="sc" style="padding:16px;animation-delay:.25s">
+      <div class="sh"><div class="st">Sobre o sistema</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text3)">Versão</span><span style="color:var(--cyan);font-weight:700">1.0.0</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text3)">Desenvolvido para</span><span style="color:var(--text);font-weight:600">EmyFlix CRM</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text3)">Banco de dados</span><span style="color:var(--green);font-weight:700">PostgreSQL</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text3)">Automação</span><span style="color:var(--blue);font-weight:700">n8n + Evolution API</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text3)">Hospedagem</span><span style="color:var(--purple);font-weight:700">Easy Panel</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- MODAL CADASTRO -->
+<div class="modal-bg" id="modal-cadastro">
+  <div class="modal">
+    <div class="modal-title">NOVO CLIENTE</div>
+    <button class="modal-close" onclick="closeModal('modal-cadastro')">✕</button>
+    <div class="form-row" style="margin-bottom:0">
+      <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" placeholder="Ex: Carlos Silva"></div>
+      <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" placeholder="+55 11 99999-0000"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:0">
+      <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" placeholder="cliente@email.com"></div>
+      <div class="form-group"><label class="form-label">CPF / CNPJ</label><input class="form-input" placeholder="000.000.000-00"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:0">
+      <div class="form-group">
+        <label class="form-label">Serviço</label>
+        <select class="form-input" id="modal-servico" onchange="atualizarPlanos()">
+          <option value="">Selecione...</option>
+          <option value="tv">Canais de TV</option>
+          <option value="net">Internet / Fibra</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Plano</label>
+        <select class="form-input" id="modal-plano">
+          <option value="">Selecione o serviço primeiro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row3" style="margin-bottom:0">
+      <div class="form-group"><label class="form-label">Valor (R$)</label><input class="form-input" id="modal-valor" placeholder="0,00"></div>
+      <div class="form-group"><label class="form-label">Data de início</label><input class="form-input" type="date"></div>
+      <div class="form-group"><label class="form-label">Data de vencimento</label><input class="form-input" type="date"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:0">
+      <div class="form-group">
+        <label class="form-label">Forma de pagamento</label>
+        <select class="form-input">
+          <option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-input"><option>Ativo</option><option>Inativo</option><option>Suspenso</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input" rows="2" placeholder="Anotações sobre o cliente..."></textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+      <button class="btn btn-ghost" onclick="closeModal('modal-cadastro')">CANCELAR</button>
+      <button class="btn btn-blue" onclick="salvarCliente()">CADASTRAR CLIENTE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// DATA
+const clientes=[
+  {id:1,n:'Carlos Silva',s:'tv',sv:'Canais de TV',pl:'TV Premium',tel:'(11)99999-0001',v:'R$299',d:'20/03',dias:3,st:'warn'},
+  {id:2,n:'Roberto Nunes',s:'tv',sv:'Canais de TV',pl:'TV Básico',tel:'(11)99999-0002',v:'R$59',d:'22/03',dias:5,st:'warn'},
+  {id:3,n:'Ana Souza',s:'net',sv:'Internet',pl:'Fibra 100M',tel:'(11)99999-0003',v:'R$89',d:'24/03',dias:7,st:'warn'},
+  {id:4,n:'Marcos Lima',s:'tv',sv:'Canais de TV',pl:'TV Premium',tel:'(11)99999-0004',v:'R$299',d:'01/04',dias:15,st:'ok'},
+  {id:5,n:'Juliana Costa',s:'net',sv:'Internet',pl:'Fibra 50M',tel:'(11)99999-0005',v:'R$69',d:'10/02',dias:-5,st:'bad'},
+  {id:6,n:'Pedro Alves',s:'tv',sv:'Canais de TV',pl:'TV Básico',tel:'(11)99999-0006',v:'R$59',d:'05/04',dias:19,st:'ok'},
+  {id:7,n:'Mariana Reis',s:'net',sv:'Internet',pl:'Fibra 300M',tel:'(11)99999-0007',v:'R$149',d:'12/04',dias:26,st:'ok'},
+  {id:8,n:'Lucas Ferreira',s:'tv',sv:'Canais de TV',pl:'TV Premium',tel:'(11)99999-0008',v:'R$299',d:'18/04',dias:32,st:'ok'},
+];
+
+// TAG helpers
+function ts(c){return c.s==='tv'?'<span class="tag ttv">TV</span>':'<span class="tag tnet">NET</span>'}
+function tst(c){
+  if(c.st==='ok') return '<span class="tag tok">ATIVO</span>';
+  if(c.st==='warn') return `<span class="tag twarn">${c.dias}D</span>`;
+  return '<span class="tag tbad">VENCIDO</span>';
+}
+
+// DASHBOARD table
+function renderDash(list){
+  document.getElementById('dash-tbody').innerHTML=list.map(c=>`
+    <div class="trow" style="grid-template-columns:1fr 70px 90px 70px 55px 65px">
+      <span style="color:#d0e8ff;font-weight:700">${c.n}</span>${ts(c)}
+      <span style="font-size:11px">${c.pl}</span>
+      <span>${c.v}</span>
+      <span style="color:var(--text3);font-size:10px;font-weight:700;letter-spacing:.04em">${c.d}</span>
+      ${tst(c)}
+    </div>`).join('');
+}
+renderDash(clientes);
+function ftD(f,el){document.querySelectorAll('#page-dashboard .fb').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');renderDash(f==='all'?clientes:clientes.filter(c=>c.s===f));}
+
+// CLIENTES table
+let clientesFiltrados=[...clientes];
+function renderCli(list){
+  document.getElementById('cli-tbody').innerHTML=list.map(c=>`
+    <div class="trow" style="grid-template-columns:1fr 70px 90px 80px 70px 60px 80px">
+      <span style="color:#d0e8ff;font-weight:700">${c.n}</span>${ts(c)}
+      <span style="font-size:11px">${c.pl}</span>
+      <span style="font-size:11px;color:var(--text3)">${c.tel}</span>
+      <span>${c.v}</span>
+      <span style="color:var(--text3);font-size:10px;font-weight:700;letter-spacing:.04em">${c.d}</span>
+      <button class="btn btn-ghost" style="padding:3px 8px;font-size:9px" onclick="openModal('modal-cadastro')">EDITAR</button>
+    </div>`).join('');
+}
+renderCli(clientes);
+function ftC(f,el){
+  document.querySelectorAll('#page-clientes .fb').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');
+  if(f==='all') renderCli(clientes);
+  else if(f==='tv') renderCli(clientes.filter(c=>c.s==='tv'));
+  else if(f==='net') renderCli(clientes.filter(c=>c.s==='net'));
+  else if(f==='warn') renderCli(clientes.filter(c=>c.st==='warn'));
+  else if(f==='bad') renderCli(clientes.filter(c=>c.st==='bad'));
+}
+function buscarCliente(q){renderCli(clientes.filter(c=>c.n.toLowerCase().includes(q.toLowerCase())));}
+
+// NAVEGAÇÃO
+function goPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nb-'+p).classList.add('on');
+  if(p==='relatorios') initRelCharts();
+  if(p==='servicos') initServChart();
+}
+
+// MODAL
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')}));
+
+// PLANOS dinâmicos
+function atualizarPlanos(){
+  const s=document.getElementById('modal-servico').value;
+  const p=document.getElementById('modal-plano');
+  const v=document.getElementById('modal-valor');
+  const tv=[['tv-basico','TV Básico','59'],['tv-premium','TV Premium','299'],['tv-familia','TV Família','129']];
+  const net=[['net-50','Fibra 50M','69'],['net-100','Fibra 100M','89'],['net-300','Fibra 300M','149']];
+  const opts=s==='tv'?tv:s==='net'?net:[];
+  p.innerHTML=opts.length?opts.map(x=>`<option value="${x[0]}" data-val="${x[2]}">${x[1]}</option>`):'<option>Selecione o serviço primeiro</option>';
+  if(opts.length){v.value='R$'+opts[0][2];p.onchange=()=>{const sel=p.selectedOptions[0];v.value='R$'+sel.dataset.val}}
+}
+function salvarCliente(){alert('Cliente cadastrado com sucesso!');closeModal('modal-cadastro');}
+
+// CLOCK
+function updateClock(){
+  const now=new Date();
+  const d=String(now.getDate()).padStart(2,'0');
+  const m=String(now.getMonth()+1).padStart(2,'0');
+  const y=now.getFullYear();
+  const h=String(now.getHours()).padStart(2,'0');
+  const mi=String(now.getMinutes()).padStart(2,'0');
+  const el=document.getElementById('clock');
+  if(el) el.textContent=`${d}/${m}/${y} · ${h}:${mi}`;
+}
+updateClock(); setInterval(updateClock,30000);
+
+// CHARTS CONFIG
+const gOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
+  x:{ticks:{color:'#1e3a5a',font:{size:9,family:'Oxanium, sans-serif',weight:'600'}},grid:{color:'rgba(13,42,74,.5)'}},
+  y:{ticks:{color:'#1e3a5a',font:{size:9,family:'Oxanium, sans-serif'}},grid:{color:'rgba(13,42,74,.5)'}}
+}};
+
+// DASHBOARD CHARTS
+new Chart(document.getElementById('cLine'),{type:'line',
+  data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+  datasets:[
+    {data:[3,4,2,5,6,4,7,5,8,6,7,8],borderColor:'#00aaff',backgroundColor:'rgba(0,170,255,0.07)',tension:0.4,fill:true,pointRadius:0,borderWidth:1.5},
+    {data:[1,2,3,2,4,3,4,5,4,6,5,6],borderColor:'#00e5ff',backgroundColor:'rgba(0,229,255,0.05)',tension:0.4,fill:true,pointRadius:0,borderWidth:1.5}
+  ]},options:gOpts});
+
+new Chart(document.getElementById('cDona'),{type:'doughnut',
+  data:{labels:['TV Básico','TV Premium','Internet','Inativo'],datasets:[{data:[8,10,11,4],backgroundColor:['#00aaff','#00e5ff','#00e676','#ff5252'],borderWidth:0,hoverOffset:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'74%'}});
+
+new Chart(document.getElementById('cBar'),{type:'bar',
+  data:{labels:Array.from({length:30},(_,i)=>i+1),datasets:[{data:[2,1,3,0,2,1,0,2,3,2,1,0,2,4,3,2,1,0,2,1,3,2,1,2,0,3,2,1,2,3],backgroundColor:'rgba(0,170,255,0.22)',borderColor:'#00aaff',borderWidth:0,borderRadius:2}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});
+
+// SERVIÇOS CHART
+function initServChart(){
+  if(document.getElementById('cServ')._chartInst) return;
+  const c=new Chart(document.getElementById('cServ'),{type:'bar',
+    data:{labels:['TV Básico','TV Premium','Fibra 50M','Fibra 100M','Fibra 300M'],
+    datasets:[{data:[472,2990,276,445,298],backgroundColor:['rgba(0,170,255,.5)','rgba(0,229,255,.5)','rgba(0,230,118,.5)','rgba(0,230,118,.4)','rgba(0,229,255,.4)'],borderRadius:4,borderWidth:0}]},
+    options:{...gOpts,plugins:{legend:{display:false}}}});
+  document.getElementById('cServ')._chartInst=c;
+}
+
+// RELATÓRIOS CHARTS
+function initRelCharts(){
+  if(document.getElementById('cRec')._done) return;
+  document.getElementById('cRec')._done=true;
+  new Chart(document.getElementById('cRec'),{type:'line',
+    data:{labels:['Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','Jan','Fev'],
+    datasets:[{data:[3100,3400,3600,3800,3900,4100,4000,4300,4200,4500,4400,4750],borderColor:'#00e676',backgroundColor:'rgba(0,230,118,0.08)',tension:0.4,fill:true,pointRadius:0,borderWidth:2}]},
+    options:gOpts});
+  new Chart(document.getElementById('cWpp'),{type:'bar',
+    data:{labels:Array.from({length:30},(_,i)=>i+1),datasets:[{data:[2,1,3,0,2,1,0,2,3,2,1,0,2,4,3,2,1,0,2,1,3,2,1,2,0,3,2,1,2,3],backgroundColor:'rgba(0,229,255,0.25)',borderRadius:2,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});
+  new Chart(document.getElementById('cVenc'),{type:'bar',
+    data:{labels:['Sem 1','Sem 2','Sem 3','Sem 4'],datasets:[
+      {label:'TV',data:[3,5,2,4],backgroundColor:'rgba(0,170,255,.5)',borderRadius:4,borderWidth:0},
+      {label:'Net',data:[1,2,3,1],backgroundColor:'rgba(0,229,255,.4)',borderRadius:4,borderWidth:0}
+    ]},options:{...gOpts,plugins:{legend:{display:false}}}});
+  new Chart(document.getElementById('cPie'),{type:'doughnut',
+    data:{labels:['TV','Internet'],datasets:[{data:[3050,1700],backgroundColor:['#00aaff','#00e676'],borderWidth:0,hoverOffset:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'68%'}});
+}
+</script>
+</body>
+</html>
