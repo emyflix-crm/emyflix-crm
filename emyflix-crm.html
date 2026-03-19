@@ -113,9 +113,9 @@ select.fi option{background:var(--bg2);color:var(--text)}
 .tog.on .tog-knob{transform:translateX(18px);background:var(--blue)}
 
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}
+.modal{background:var(--bg1);border:0.5px solid var(--border2);border-radius:14px;padding:22px;width:580px;max-width:96vw;max-height:92vh;overflow-y:auto;overflow-x:visible;position:relative}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:flex-start;justify-content:center;overflow-y:auto;padding:20px 0}
 .modal-bg.open{display:flex}
-.modal{background:var(--bg1);border:0.5px solid var(--border2);border-radius:14px;padding:22px;width:580px;max-width:96vw;max-height:92vh;overflow-y:auto;position:relative}
 .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);border-radius:14px 14px 0 0}
 .modal-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:.06em;margin-bottom:16px}
 .modal-close{position:absolute;top:14px;right:14px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:18px;font-family:'Oxanium',sans-serif}
@@ -273,11 +273,11 @@ select.fi option{background:var(--bg2);color:var(--text)}
       <div class="sc" style="padding:14px">
         <div class="sh"><div class="st">Horário de envio</div></div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-inicio">
+          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-inicio" onmousedown="event.stopPropagation()">
             <option>08:00</option><option>09:00</option><option selected>10:00</option><option>11:00</option>
           </select>
           <span style="font-size:12px;color:var(--text3)">até</span>
-          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-fim">
+          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-fim" onmousedown="event.stopPropagation()">
             <option>17:00</option><option selected>18:00</option><option>19:00</option><option>20:00</option>
           </select>
         </div>
@@ -401,13 +401,13 @@ select.fi option{background:var(--bg2);color:var(--text)}
     <div class="fr2">
       <div class="fg">
         <label class="fl">Serviço *</label>
-        <select class="fi" id="cli-servico" onchange="atualizarPlanosModal()">
+        <select class="fi" id="cli-servico" onchange="atualizarPlanosModal()" onmousedown="event.stopPropagation()">
           <option value="">Selecione...</option>
         </select>
       </div>
       <div class="fg">
         <label class="fl">Plano *</label>
-        <select class="fi" id="cli-plano" onchange="atualizarValorModal()">
+        <select class="fi" id="cli-plano" onchange="atualizarValorModal()" onmousedown="event.stopPropagation()">
           <option value="">Selecione o serviço primeiro</option>
         </select>
       </div>
@@ -420,11 +420,11 @@ select.fi option{background:var(--bg2);color:var(--text)}
     <div class="fr2">
       <div class="fg">
         <label class="fl">Pagamento</label>
-        <select class="fi" id="cli-pgto"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option></select>
+        <select class="fi" id="cli-pgto" onmousedown="event.stopPropagation()"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option></select>
       </div>
       <div class="fg">
         <label class="fl">Status</label>
-        <select class="fi" id="cli-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option><option value="suspenso">Suspenso</option></select>
+        <select class="fi" id="cli-status" onmousedown="event.stopPropagation()"><option value="ativo">Ativo</option><option value="inativo">Inativo</option><option value="suspenso">Suspenso</option></select>
       </div>
     </div>
     <div class="fg"><label class="fl">Endereço</label><input class="fi" id="cli-end" placeholder="Rua, número, bairro, cidade"></div>
@@ -445,15 +445,16 @@ select.fi option{background:var(--bg2);color:var(--text)}
     <div class="fr2">
       <div class="fg">
         <label class="fl">Cor</label>
-        <select class="fi" id="serv-cor">
-          <option value="#00aaff">Azul</option>
-          <option value="#00e5ff">Ciano</option>
-          <option value="#00e676">Verde</option>
-          <option value="#ffab00">Âmbar</option>
-          <option value="#a78bfa">Roxo</option>
-          <option value="#ff5252">Vermelho</option>
-          <option value="#ff6eb4">Rosa</option>
-        </select>
+        <input type="hidden" id="serv-cor" value="#00aaff">
+        <div style="display:flex;gap:6px;flex-wrap:wrap" id="cor-btns">
+          <button type="button" onclick="selecionarCor('#00aaff',this)" style="width:28px;height:28px;border-radius:50%;background:#00aaff;border:2px solid #fff;cursor:pointer" title="Azul"></button>
+          <button type="button" onclick="selecionarCor('#00e5ff',this)" style="width:28px;height:28px;border-radius:50%;background:#00e5ff;border:2px solid transparent;cursor:pointer" title="Ciano"></button>
+          <button type="button" onclick="selecionarCor('#00e676',this)" style="width:28px;height:28px;border-radius:50%;background:#00e676;border:2px solid transparent;cursor:pointer" title="Verde"></button>
+          <button type="button" onclick="selecionarCor('#ffab00',this)" style="width:28px;height:28px;border-radius:50%;background:#ffab00;border:2px solid transparent;cursor:pointer" title="Âmbar"></button>
+          <button type="button" onclick="selecionarCor('#a78bfa',this)" style="width:28px;height:28px;border-radius:50%;background:#a78bfa;border:2px solid transparent;cursor:pointer" title="Roxo"></button>
+          <button type="button" onclick="selecionarCor('#ff5252',this)" style="width:28px;height:28px;border-radius:50%;background:#ff5252;border:2px solid transparent;cursor:pointer" title="Vermelho"></button>
+          <button type="button" onclick="selecionarCor('#ff6eb4',this)" style="width:28px;height:28px;border-radius:50%;background:#ff6eb4;border:2px solid transparent;cursor:pointer" title="Rosa"></button>
+        </div>
       </div>
       <div class="fg"><label class="fl">Ícone (emoji)</label><input class="fi" id="serv-icon" placeholder="📺" maxlength="2"></div>
     </div>
@@ -902,6 +903,7 @@ function abrirModalServico(id=null){
     if(s){
       document.getElementById('serv-nome').value=s.nome;
       document.getElementById('serv-cor').value=s.cor;
+      resetCorBtns(s.cor);
       document.getElementById('serv-icon').value=s.icon||'';
       document.getElementById('serv-desc').value=s.desc||'';
       planosRows=s.planos.map(p=>({...p}));
@@ -909,6 +911,7 @@ function abrirModalServico(id=null){
   } else {
     document.getElementById('serv-nome').value='';
     document.getElementById('serv-cor').value='#00aaff';
+    resetCorBtns('#00aaff');
     document.getElementById('serv-icon').value='';
     document.getElementById('serv-desc').value='';
     planosRows=[{id:1,nome:'',valor:''}];
@@ -916,7 +919,20 @@ function abrirModalServico(id=null){
   renderPlanosRows();
   openModal('modal-servico');
 }
+function selecionarCor(cor, btn){
+  document.getElementById('serv-cor').value=cor;
+  document.querySelectorAll('#cor-btns button').forEach(b=>b.style.border='2px solid transparent');
+  btn.style.border='2px solid #fff';
+}
 function editarServico(id){abrirModalServico(id);}
+  document.querySelectorAll('#cor-btns button').forEach(b=>{
+    b.style.border = b.title && cor && b.style.background.includes(cor.replace('#','')) ? '2px solid #fff' : '2px solid transparent';
+  });
+  // simpler: match by background color
+  const btns=document.querySelectorAll('#cor-btns button');
+  btns.forEach(b=>b.style.border='2px solid transparent');
+  btns.forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(cor)) b.style.border='2px solid #fff';});
+}
 function renderPlanosRows(){
   document.getElementById('planos-rows').innerHTML=planosRows.map((p,i)=>`
     <div style="display:grid;grid-template-columns:1fr 120px 36px;gap:6px;margin-bottom:6px" id="plano-row-${i}">
