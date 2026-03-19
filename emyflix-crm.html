@@ -919,15 +919,25 @@ function abrirModalServico(id=null){
 function editarServico(id){abrirModalServico(id);}
 function renderPlanosRows(){
   document.getElementById('planos-rows').innerHTML=planosRows.map((p,i)=>`
-    <div style="display:grid;grid-template-columns:1fr 120px 36px;gap:6px;margin-bottom:6px">
-      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Nome do plano" value="${p.nome||''}" oninput="planosRows[${i}].nome=this.value">
-      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Valor R$" type="number" value="${p.valor||''}" oninput="planosRows[${i}].valor=parseFloat(this.value)||0">
-      <button class="btn btn-red btn-sm" onclick="removePlanoRow(${i})" style="padding:7px">✕</button>
+    <div style="display:grid;grid-template-columns:1fr 120px 36px;gap:6px;margin-bottom:6px" id="plano-row-${i}">
+      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Nome do plano" value="${p.nome||''}" onblur="planosRows[${i}].nome=this.value" onchange="planosRows[${i}].nome=this.value">
+      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Valor R$" type="number" value="${p.valor||''}" onblur="planosRows[${i}].valor=parseFloat(this.value)||0" onchange="planosRows[${i}].valor=parseFloat(this.value)||0">
+      <button class="btn btn-red btn-sm" onclick="removePlanoRow(${i})" style="padding:7px;font-size:14px" type="button">✕</button>
     </div>
   `).join('');
 }
-function addPlanoRow(){planosRows.push({id:nextId(planosRows),nome:'',valor:''});renderPlanosRows();}
-function removePlanoRow(i){if(planosRows.length>1){planosRows.splice(i,1);renderPlanosRows();}}
+function addPlanoRow(){
+  planosRows.push({id:nextId(planosRows),nome:'',valor:''});
+  renderPlanosRows();
+  // Focus no novo campo
+  setTimeout(()=>{
+    const rows=document.querySelectorAll('#planos-rows .fi');
+    if(rows.length) rows[rows.length-2].focus();
+  },50);
+}
+function removePlanoRow(i){
+  if(planosRows.length>1){planosRows.splice(i,1);renderPlanosRows();}
+}
 function salvarServico(){
   const nome=document.getElementById('serv-nome').value.trim();
   if(!nome){alert('Digite o nome do serviço.');return;}
@@ -1080,7 +1090,11 @@ function closeConfirm(){document.getElementById('confirm-del').classList.remove(
 // ===== MODALS =====
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
-document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')}));
+document.querySelectorAll('.modal-bg').forEach(m=>{
+  m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
+  const modal=m.querySelector('.modal');
+  if(modal) modal.addEventListener('click',e=>e.stopPropagation());
+});
 
 // ===== INIT =====
 renderDashboard();
