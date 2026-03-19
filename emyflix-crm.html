@@ -538,7 +538,14 @@ function saveState(){try{localStorage.setItem('emyflix_state', JSON.stringify(st
 function loadState(){
   try{
     const s = localStorage.getItem('emyflix_state');
-    if(s) state = {...state, ...JSON.parse(s)};
+    if(s){
+      const saved = JSON.parse(s);
+      // Só carrega se tiver dados válidos
+      if(saved.servicos && saved.servicos.length > 0) state.servicos = saved.servicos;
+      if(saved.clientes && saved.clientes.length >= 0) state.clientes = saved.clientes;
+      if(saved.config) state.config = {...state.config, ...saved.config};
+      if(saved.notif) state.notif = saved.notif;
+    }
   }catch(e){}
 }
 loadState();
