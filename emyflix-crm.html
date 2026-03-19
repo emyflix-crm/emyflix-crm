@@ -1090,19 +1090,6 @@ function closeConfirm(){document.getElementById('confirm-del').classList.remove(
 // ===== MODALS =====
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
-document.querySelectorAll('.modal-bg').forEach(m=>{
-  ['mousedown','touchstart'].forEach(evt=>{
-    m.addEventListener(evt,function(e){
-      if(e.target===this) this.classList.remove('open');
-    });
-  });
-  const modal=m.querySelector('.modal');
-  if(modal){
-    ['mousedown','touchstart'].forEach(evt=>{
-      modal.addEventListener(evt,e=>e.stopPropagation());
-    });
-  }
-});
 
 // ===== INIT =====
 renderDashboard();
