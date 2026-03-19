@@ -550,7 +550,9 @@ function getPlano(servId, planoId){
 }
 function getDiasVenc(venc){
   const hoje = new Date(); hoje.setHours(0,0,0,0);
-  const v = new Date(venc); v.setHours(0,0,0,0);
+  const [y,m,d] = venc.split('-');
+  const v = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
+  v.setHours(0,0,0,0);
   return Math.round((v-hoje)/(1000*60*60*24));
 }
 function getStatusReal(c){
@@ -585,6 +587,7 @@ function renderPage(p){
   if(p==='servicos') renderServicos();
   if(p==='notificacoes') renderNotif();
   if(p==='relatorios') renderRelatorios();
+  if(p==='config') renderConfig();    // ← LINHA NOVA
 }
 
 // ===== CLOCK =====
@@ -781,7 +784,7 @@ function abrirModalCliente(id=null){
   const sel=document.getElementById('cli-servico');
   sel.innerHTML='<option value="">Selecione...</option>'+state.servicos.map(s=>`<option value="${s.id}">${s.nome}</option>`).join('');
   // Limpa campos
-  ['cli-nome','cli-wpp','cli-email','cli-doc','cli-valor','cli-end','cli-obs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['cli-nome','cli-wpp','cli-email','cli-doc','cli-valor','cli-end','cli-obs'].forEach(fieldId=>{const el=document.getElementById(fieldId);const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('cli-plano').innerHTML='<option value="">Selecione o serviço primeiro</option>';
   document.getElementById('cli-inicio').value='';
   document.getElementById('cli-venc').value='';
@@ -1028,6 +1031,14 @@ function renderRelatorios(){
 }
 
 // ===== CONFIG =====
+function renderConfig(){
+  document.getElementById('cfg-empresa').value = state.config.empresa || '';
+  document.getElementById('cfg-wpp').value = state.config.wpp || '';
+  document.getElementById('cfg-email').value = state.config.email || '';
+  document.getElementById('cfg-evo-url').value = state.config.evoUrl || '';
+  document.getElementById('cfg-evo-key').value = state.config.evoKey || '';
+  document.getElementById('cfg-evo-inst').value = state.config.evoInst || '';
+}
 function salvarConfig(){
   state.config={
     empresa:document.getElementById('cfg-empresa').value,
