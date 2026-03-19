@@ -8,17 +8,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg0:#04080f;--bg1:#070d1a;--bg2:#0a1225;--bg3:#0d1830;
-  --blue:#00aaff;--cyan:#00e5ff;--green:#00e676;--amber:#ffab00;--red:#ff5252;--purple:#a78bfa;
-  --text:#c8e6ff;--text2:#5a8ab8;--text3:#1e3a5a;
-  --border:#0d2a4a;--border2:#1a4a7a;
-}
+:root{--bg0:#04080f;--bg1:#070d1a;--bg2:#0a1225;--bg3:#0d1830;--blue:#00aaff;--cyan:#00e5ff;--green:#00e676;--amber:#ffab00;--red:#ff5252;--purple:#a78bfa;--text:#c8e6ff;--text2:#5a8ab8;--text3:#1e3a5a;--border:#0d2a4a;--border2:#1a4a7a;}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg0);font-family:'Oxanium',sans-serif;color:var(--text);display:flex}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,170,255,.01) 3px,rgba(0,170,255,.01) 4px);pointer-events:none;z-index:0}
-
-/* SIDEBAR */
 .sidebar{width:54px;min-height:100vh;background:var(--bg1);border-right:0.5px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px;z-index:100;flex-shrink:0}
 .logo-box{width:36px;height:36px;border-radius:8px;background:#050e1f;border:1px solid rgba(0,170,255,.35);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:11px;font-weight:800;color:var(--cyan);cursor:pointer}
 .nb{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;border:0.5px solid transparent;color:var(--text3);position:relative}
@@ -26,13 +19,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .nb svg{width:15px;height:15px}
 .nb .tip{position:absolute;left:46px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:200}
 .nb:hover .tip{opacity:1}
-
-/* MAIN */
 .content{flex:1;overflow-y:auto;position:relative;z-index:1}
 .page{display:none;padding:14px 16px;min-height:100vh}
 .page.active{display:block}
-
-/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:0.5px solid var(--border)}
 .brand-name{font-size:16px;font-weight:800;background:linear-gradient(90deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.08em}
 .brand-sub{font-size:9px;color:var(--text3);letter-spacing:.14em;font-weight:500;margin-top:1px}
@@ -43,14 +32,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.6s infinite}
 .datechip{font-size:10px;color:var(--text3);padding:4px 10px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);font-weight:500}
 .avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#002a5a,#0055aa);border:1px solid rgba(0,170,255,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--cyan)}
-
-/* GRIDS */
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:9px}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:9px}
 .g2{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:8px;margin-bottom:9px}
 .g2e{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
-
-/* CARDS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .sc{background:var(--bg1);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;animation:fadeUp .4s ease both}
 .sc:hover{border-color:var(--border2)}
@@ -69,19 +53,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .st{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.1em;display:flex;align-items:center;gap:6px}
 .st::before{content:'';width:2px;height:11px;background:var(--blue);border-radius:2px;display:block}
-
-/* TAGS */
 .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em}
 .tok{background:rgba(0,230,118,.07);color:var(--green);border:0.5px solid rgba(0,230,118,.2)}
 .twarn{background:rgba(255,171,0,.08);color:var(--amber);border:0.5px solid rgba(255,171,0,.25)}
 .tbad{background:rgba(255,82,82,.08);color:var(--red);border:0.5px solid rgba(255,82,82,.2)}
-
-/* TABLE */
-.trow{padding:8px 8px;border-radius:6px;font-size:12px;color:var(--text2);display:grid;align-items:center;gap:6px;transition:background .15s;font-weight:500}
+.trow{padding:8px;border-radius:6px;font-size:12px;color:var(--text2);display:grid;align-items:center;gap:6px;transition:background .15s;font-weight:500}
 .trow:hover{background:rgba(0,170,255,.04)}
 .th{font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;border-bottom:0.5px solid var(--border);padding-bottom:7px;margin-bottom:3px;font-weight:700}
-
-/* BUTTONS */
 .btn{font-family:'Oxanium',sans-serif;font-size:10px;letter-spacing:.07em;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:700;transition:all .18s;border:0.5px solid}
 .btn:hover{transform:translateY(-1px)}
 .btn-blue{background:rgba(0,170,255,.1);color:var(--blue);border-color:rgba(0,170,255,.35)}
@@ -90,12 +68,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .btn-amber{background:rgba(255,171,0,.08);color:var(--amber);border-color:rgba(255,171,0,.3)}
 .btn-ghost{background:transparent;color:var(--text3);border-color:var(--border2)}
 .btn-sm{padding:4px 10px;font-size:9px}
-
-/* FILTER */
 .fb{padding:3px 10px;border-radius:20px;font-size:9px;cursor:pointer;border:0.5px solid var(--border2);background:transparent;color:var(--text3);font-family:'Oxanium',sans-serif;letter-spacing:.06em;font-weight:600;transition:all .15s}
 .fb:hover,.fb.sel{border-color:rgba(0,170,255,.4);color:var(--blue);background:rgba(0,170,255,.07)}
-
-/* FORM */
 .fg{margin-bottom:12px}
 .fl{font-size:10px;color:var(--text2);letter-spacing:.1em;font-weight:700;margin-bottom:5px;display:block;text-transform:uppercase}
 .fi{width:100%;background:var(--bg2);border:0.5px solid var(--border2);border-radius:8px;padding:9px 12px;font-family:'Oxanium',sans-serif;font-size:13px;color:var(--text);font-weight:500;outline:none;transition:border-color .2s}
@@ -104,54 +78,38 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 select.fi option{background:var(--bg2);color:var(--text)}
 .fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-
-/* TOGGLE */
 .tog{position:relative;width:40px;height:22px;display:inline-block;flex-shrink:0}
 .tog-track{position:absolute;inset:0;border-radius:11px;background:var(--bg3);border:0.5px solid var(--border2);transition:all .2s;cursor:pointer}
 .tog.on .tog-track{background:rgba(0,170,255,.2);border-color:var(--blue)}
 .tog-knob{position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:var(--text3);transition:all .2s;pointer-events:none}
 .tog.on .tog-knob{transform:translateX(18px);background:var(--blue)}
-
-/* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}
+/* MODAL — key fix: overflow visible so select dropdowns work */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:flex-start;justify-content:center;padding-top:40px}
 .modal-bg.open{display:flex}
-.modal{background:var(--bg1);border:0.5px solid var(--border2);border-radius:14px;padding:22px;width:580px;max-width:96vw;max-height:92vh;overflow-y:auto;position:relative}
+.modal{background:var(--bg1);border:0.5px solid var(--border2);border-radius:14px;padding:22px;width:580px;max-width:96vw;max-height:86vh;overflow-y:auto;position:relative}
 .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);border-radius:14px 14px 0 0}
 .modal-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:.06em;margin-bottom:16px}
 .modal-close{position:absolute;top:14px;right:14px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:18px;font-family:'Oxanium',sans-serif}
 .modal-close:hover{color:var(--red)}
-
-/* CONFIRM */
 .confirm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:600;align-items:center;justify-content:center}
 .confirm-bg.open{display:flex}
 .confirm-box{background:var(--bg1);border:0.5px solid var(--red);border-radius:12px;padding:24px;width:340px;text-align:center}
-.confirm-box::before{content:'';display:block;width:40px;height:40px;border-radius:50%;background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.3);margin:0 auto 12px;line-height:40px;font-size:18px}
-
-/* SCROLLBAR */
 .content::-webkit-scrollbar{width:4px}
 .content::-webkit-scrollbar-track{background:var(--bg0)}
 .content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-/* NOTIF ROW */
+.modal::-webkit-scrollbar{width:4px}
+.modal::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 .nr{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:0.5px solid var(--border)}
 .nr:last-child{border-bottom:none}
 .nd{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
-
-/* SERVICE CARD */
 .serv-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:14px;position:relative;transition:border-color .2s}
 .serv-card:hover{border-color:var(--border2)}
-.serv-card .serv-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
-.serv-card .serv-count{font-size:11px;color:var(--text3)}
 .serv-card .serv-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px;opacity:0;transition:opacity .15s}
 .serv-card:hover .serv-actions{opacity:1}
-
-/* COLOR DOT */
 .cdot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;flex-shrink:0}
 </style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="logo-box" onclick="goPage('dashboard')">EF</div>
   <div class="nb on" id="nb-dashboard" onclick="goPage('dashboard')">
@@ -182,8 +140,7 @@ select.fi option{background:var(--bg2);color:var(--text)}
 </div>
 
 <div class="content">
-
-<!-- ===== DASHBOARD ===== -->
+<!-- DASHBOARD -->
 <div class="page active" id="page-dashboard">
   <div class="topbar">
     <div><div class="brand-name">EMYFLIX CRM</div><div class="brand-sub">GESTÃO DE CLIENTES</div></div>
@@ -195,10 +152,7 @@ select.fi option{background:var(--bg2);color:var(--text)}
   </div>
   <div class="g4" id="dash-stats"></div>
   <div class="g2">
-    <div class="sc" style="padding:14px">
-      <div class="sh"><div class="st">Clientes por serviço</div></div>
-      <div style="position:relative;height:130px"><canvas id="cLine"></canvas></div>
-    </div>
+    <div class="sc" style="padding:14px"><div class="sh"><div class="st">Clientes por serviço</div></div><div style="position:relative;height:130px"><canvas id="cLine"></canvas></div></div>
     <div class="sc" style="padding:14px">
       <div class="sh"><div class="st">Distribuição</div></div>
       <div style="display:flex;align-items:center;gap:12px">
@@ -208,78 +162,56 @@ select.fi option{background:var(--bg2);color:var(--text)}
     </div>
   </div>
   <div class="sc" style="padding:14px;margin-bottom:9px">
-    <div class="sh">
-      <div class="st">Próximos vencimentos</div>
-      <button class="btn btn-blue btn-sm" onclick="goPage('clientes')">VER TODOS</button>
-    </div>
+    <div class="sh"><div class="st">Próximos vencimentos</div><button class="btn btn-blue btn-sm" onclick="goPage('clientes')">VER TODOS</button></div>
     <div id="dash-venc"></div>
   </div>
-  <div class="sc" style="padding:14px">
-    <div class="sh"><div class="st">Alertas recentes</div></div>
-    <div id="dash-alertas"></div>
-  </div>
+  <div class="sc" style="padding:14px"><div class="sh"><div class="st">Alertas recentes</div></div><div id="dash-alertas"></div></div>
 </div>
 
-<!-- ===== CLIENTES ===== -->
+<!-- CLIENTES -->
 <div class="page" id="page-clientes">
   <div class="topbar">
     <div><div class="page-title">CLIENTES</div><div class="page-sub">CADASTRAR · EDITAR · EXCLUIR</div></div>
     <div style="display:flex;gap:8px;align-items:center">
-      <input class="fi" style="width:200px;padding:7px 12px;font-size:11px" placeholder="Buscar cliente..." oninput="buscarCliente(this.value)" id="search-cli">
-      <button class="btn btn-blue" onclick="abrirModalCliente()">+ NOVO CLIENTE</button>
+      <input class="fi" style="width:200px;padding:7px 12px;font-size:11px" placeholder="Buscar..." oninput="buscarCliente(this.value)">
+      <button class="btn btn-blue" onclick="abrirModalCliente(null)">+ NOVO CLIENTE</button>
     </div>
   </div>
   <div class="g4" id="cli-stats" style="margin-bottom:12px"></div>
   <div class="sc" style="padding:14px">
-    <div class="sh">
-      <div class="st">Lista de clientes</div>
-      <div style="display:flex;gap:5px" id="cli-filtros"></div>
-    </div>
+    <div class="sh"><div class="st">Lista de clientes</div><div style="display:flex;gap:5px" id="cli-filtros"></div></div>
     <div id="cli-thead" class="trow th"></div>
     <div id="cli-tbody"></div>
-    <div id="cli-empty" style="text-align:center;padding:30px;color:var(--text3);font-size:12px;display:none">Nenhum cliente cadastrado ainda. Clique em + NOVO CLIENTE para começar.</div>
+    <div id="cli-empty" style="text-align:center;padding:30px;color:var(--text3);font-size:12px;display:none">Nenhum cliente. Clique em + NOVO CLIENTE.</div>
   </div>
 </div>
 
-<!-- ===== SERVIÇOS ===== -->
+<!-- SERVIÇOS -->
 <div class="page" id="page-servicos">
   <div class="topbar">
     <div><div class="page-title">SERVIÇOS</div><div class="page-sub">ADICIONAR · EDITAR · EXCLUIR</div></div>
-    <button class="btn btn-blue" onclick="abrirModalServico()">+ NOVO SERVIÇO</button>
+    <button class="btn btn-blue" onclick="abrirModalServico(null)">+ NOVO SERVIÇO</button>
   </div>
   <div id="servicos-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px"></div>
-  <div class="sc" style="padding:14px">
-    <div class="sh"><div class="st">Planos por serviço</div></div>
-    <div id="planos-lista"></div>
-  </div>
+  <div class="sc" style="padding:14px"><div class="sh"><div class="st">Planos por serviço</div></div><div id="planos-lista"></div></div>
 </div>
 
-<!-- ===== NOTIFICAÇÕES ===== -->
+<!-- NOTIFICAÇÕES -->
 <div class="page" id="page-notificacoes">
   <div class="topbar">
     <div><div class="page-title">NOTIFICAÇÕES</div><div class="page-sub">CONFIGURAR ALERTAS WHATSAPP</div></div>
     <button class="btn btn-blue" onclick="salvarNotif()">SALVAR</button>
   </div>
   <div class="g2e">
-    <div class="sc bl" style="padding:16px">
-      <div class="sh"><div class="st">Seus alertas (dono)</div></div>
-      <div id="notif-dono"></div>
-    </div>
+    <div class="sc bl" style="padding:16px"><div class="sh"><div class="st">Seus alertas (dono)</div></div><div id="notif-dono"></div></div>
     <div>
-      <div class="sc cy" style="padding:16px;margin-bottom:9px">
-        <div class="sh"><div class="st">Alertas para clientes</div></div>
-        <div id="notif-cliente"></div>
-      </div>
+      <div class="sc cy" style="padding:16px;margin-bottom:9px"><div class="sh"><div class="st">Alertas para clientes</div></div><div id="notif-cliente"></div></div>
       <div class="sc" style="padding:14px">
         <div class="sh"><div class="st">Horário de envio</div></div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-inicio">
-            <option>08:00</option><option>09:00</option><option selected>10:00</option><option>11:00</option>
-          </select>
+          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-inicio"><option>08:00</option><option>09:00</option><option selected>10:00</option><option>11:00</option></select>
           <span style="font-size:12px;color:var(--text3)">até</span>
-          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-fim">
-            <option>17:00</option><option selected>18:00</option><option>19:00</option><option>20:00</option>
-          </select>
+          <select class="fi" style="width:90px;padding:7px 10px;font-size:12px" id="hora-fim"><option>17:00</option><option selected>18:00</option><option>19:00</option><option>20:00</option></select>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap">
           <button class="fb sel" onclick="this.classList.toggle('sel')">SEG</button>
@@ -299,47 +231,36 @@ select.fi option{background:var(--bg2);color:var(--text)}
       <div style="background:#050e1f;border-radius:10px;padding:12px">
         <div style="background:rgba(0,170,255,.1);border-radius:10px 10px 10px 2px;padding:10px 14px;border:0.5px solid rgba(0,170,255,.2)">
           <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:700">EMYFLIX CRM</div>
-          <div style="font-size:12px;color:var(--text);line-height:1.5">⚠️ [<span id="prev-serv" style="color:var(--cyan)">TV</span>] <strong style="color:var(--cyan)">{nome}</strong> vence em <strong style="color:var(--amber)">{dias} dias</strong><br>Plano: {plano} — R$ {valor}<br>Venc: {data} · Tel: {telefone}</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">⚠️ [{serviço}] <strong>{nome}</strong> vence em <strong style="color:var(--amber)">{dias} dias</strong><br>Plano: {plano} — R$ {valor}<br>Venc: {data}</div>
         </div>
-        <div style="font-size:10px;color:var(--text3);text-align:right;margin-top:4px;font-weight:600">10:05 ✓✓</div>
+        <div style="font-size:10px;color:var(--text3);text-align:right;margin-top:4px">10:05 ✓✓</div>
       </div>
     </div>
     <div class="sc" style="padding:14px">
       <div class="sh"><div class="st">Preview — mensagem cliente</div></div>
       <div style="background:#050e1f;border-radius:10px;padding:12px">
         <div style="background:rgba(0,229,255,.08);border-radius:10px 10px 10px 2px;padding:10px 14px;border:0.5px solid rgba(0,229,255,.15)">
-          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:700" id="prev-nome-serv">EMYFLIX — TV</div>
-          <div style="font-size:12px;color:var(--text);line-height:1.5">Olá <strong style="color:var(--cyan)">{nome}</strong>! Seu plano de <strong id="prev-serv2">TV</strong> vence em <strong style="color:var(--amber)">{dias} dias</strong> ({data}).<br><br>Renove agora para não perder o acesso!<br><span style="color:var(--blue)">Valor: R$ {valor}</span></div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:700">EMYFLIX — {SERVIÇO}</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">Olá <strong>{nome}</strong>! Seu plano de <strong>{serviço}</strong> vence em <strong style="color:var(--amber)">{dias} dias</strong> ({data}).<br><br>Renove agora!<br><span style="color:var(--blue)">Valor: R$ {valor}</span></div>
         </div>
-        <div style="font-size:10px;color:var(--text3);text-align:right;margin-top:4px;font-weight:600">10:05 ✓✓</div>
+        <div style="font-size:10px;color:var(--text3);text-align:right;margin-top:4px">10:05 ✓✓</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== RELATÓRIOS ===== -->
+<!-- RELATÓRIOS -->
 <div class="page" id="page-relatorios">
-  <div class="topbar">
-    <div><div class="page-title">RELATÓRIOS</div><div class="page-sub">ANÁLISE E DESEMPENHO</div></div>
-  </div>
+  <div class="topbar"><div><div class="page-title">RELATÓRIOS</div><div class="page-sub">ANÁLISE E DESEMPENHO</div></div></div>
   <div class="g4" id="rel-stats"></div>
   <div class="g2">
-    <div class="sc" style="padding:14px">
-      <div class="sh"><div class="st">Receita por serviço</div></div>
-      <div style="position:relative;height:140px"><canvas id="cRec"></canvas></div>
-    </div>
-    <div class="sc" style="padding:14px">
-      <div class="sh"><div class="st">Status dos clientes</div></div>
-      <div style="position:relative;height:140px"><canvas id="cStatus"></canvas></div>
-    </div>
+    <div class="sc" style="padding:14px"><div class="sh"><div class="st">Receita por serviço</div></div><div style="position:relative;height:140px"><canvas id="cRec"></canvas></div></div>
+    <div class="sc" style="padding:14px"><div class="sh"><div class="st">Status dos clientes</div></div><div style="position:relative;height:140px"><canvas id="cStatus"></canvas></div></div>
   </div>
-  <div class="sc" style="padding:14px">
-    <div class="sh"><div class="st">Clientes por serviço</div></div>
-    <div id="rel-por-servico"></div>
-  </div>
+  <div class="sc" style="padding:14px"><div class="sh"><div class="st">Clientes por serviço</div></div><div id="rel-por-servico"></div></div>
 </div>
 
-<!-- ===== CONFIG ===== -->
+<!-- CONFIG -->
 <div class="page" id="page-config">
   <div class="topbar">
     <div><div class="page-title">CONFIGURAÇÕES</div><div class="page-sub">SISTEMA E WHATSAPP</div></div>
@@ -348,7 +269,7 @@ select.fi option{background:var(--bg2);color:var(--text)}
   <div class="g2e">
     <div class="sc" style="padding:16px">
       <div class="sh"><div class="st">Dados da empresa</div></div>
-      <div class="fg"><label class="fl">Nome da empresa</label><input class="fi" id="cfg-empresa" value="EmyFlix"></div>
+      <div class="fg"><label class="fl">Nome da empresa</label><input class="fi" id="cfg-empresa"></div>
       <div class="fg"><label class="fl">Seu WhatsApp (alertas)</label><input class="fi" id="cfg-wpp" placeholder="+55 11 99999-9999"></div>
       <div class="fg"><label class="fl">E-mail</label><input class="fi" id="cfg-email" placeholder="admin@emyflix.com"></div>
     </div>
@@ -364,30 +285,17 @@ select.fi option{background:var(--bg2);color:var(--text)}
   <div class="sc" style="padding:16px">
     <div class="sh"><div class="st">Integrações</div></div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-      <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Evolution API</div>
-        <div style="font-size:10px;color:var(--text3)">WhatsApp mensagens</div>
-        <div id="int-evo" style="margin-top:6px"><span class="tag twarn">CONFIGURAR</span></div>
-      </div>
-      <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">n8n</div>
-        <div style="font-size:10px;color:var(--text3)">Automação de alertas</div>
-        <div style="margin-top:6px"><span class="tag twarn">CONFIGURAR</span></div>
-      </div>
-      <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">PostgreSQL</div>
-        <div style="font-size:10px;color:var(--text3)">Banco de dados</div>
-        <div style="margin-top:6px"><span class="tag twarn">CONFIGURAR</span></div>
-      </div>
+      <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Evolution API</div><div style="font-size:10px;color:var(--text3)">WhatsApp mensagens</div><div id="int-evo" style="margin-top:6px"><span class="tag twarn">CONFIGURAR</span></div></div>
+      <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">n8n</div><div style="font-size:10px;color:var(--text3)">Automação de alertas</div><div style="margin-top:6px"><span class="tag twarn">CONFIGURAR</span></div></div>
+      <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">PostgreSQL</div><div style="font-size:10px;color:var(--text3)">Banco de dados</div><div style="margin-top:6px"><span class="tag twarn">CONFIGURAR</span></div></div>
     </div>
   </div>
 </div>
-
-</div><!-- /content -->
+</div>
 
 <!-- MODAL CLIENTE -->
 <div class="modal-bg" id="modal-cliente">
-  <div class="modal">
+  <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title" id="modal-cli-title">NOVO CLIENTE</div>
     <button class="modal-close" onclick="closeModal('modal-cliente')">✕</button>
     <div class="fr2">
@@ -399,18 +307,8 @@ select.fi option{background:var(--bg2);color:var(--text)}
       <div class="fg"><label class="fl">CPF / CNPJ</label><input class="fi" id="cli-doc" placeholder="000.000.000-00"></div>
     </div>
     <div class="fr2">
-      <div class="fg">
-        <label class="fl">Serviço *</label>
-        <select class="fi" id="cli-servico" onchange="atualizarPlanosModal()">
-          <option value="">Selecione...</option>
-        </select>
-      </div>
-      <div class="fg">
-        <label class="fl">Plano *</label>
-        <select class="fi" id="cli-plano" onchange="atualizarValorModal()">
-          <option value="">Selecione o serviço primeiro</option>
-        </select>
-      </div>
+      <div class="fg"><label class="fl">Serviço *</label><select class="fi" id="cli-servico" onchange="atualizarPlanosModal()"><option value="">Selecione...</option></select></div>
+      <div class="fg"><label class="fl">Plano *</label><select class="fi" id="cli-plano" onchange="atualizarValorModal()"><option value="">Selecione o serviço primeiro</option></select></div>
     </div>
     <div class="fr3">
       <div class="fg"><label class="fl">Valor (R$) *</label><input class="fi" id="cli-valor" placeholder="0,00"></div>
@@ -418,17 +316,11 @@ select.fi option{background:var(--bg2);color:var(--text)}
       <div class="fg"><label class="fl">Vencimento *</label><input class="fi" id="cli-venc" type="date"></div>
     </div>
     <div class="fr2">
-      <div class="fg">
-        <label class="fl">Pagamento</label>
-        <select class="fi" id="cli-pgto"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option></select>
-      </div>
-      <div class="fg">
-        <label class="fl">Status</label>
-        <select class="fi" id="cli-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option><option value="suspenso">Suspenso</option></select>
-      </div>
+      <div class="fg"><label class="fl">Pagamento</label><select class="fi" id="cli-pgto"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option></select></div>
+      <div class="fg"><label class="fl">Status</label><select class="fi" id="cli-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option><option value="suspenso">Suspenso</option></select></div>
     </div>
     <div class="fg"><label class="fl">Endereço</label><input class="fi" id="cli-end" placeholder="Rua, número, bairro, cidade"></div>
-    <div class="fg"><label class="fl">Observações</label><textarea class="fi" id="cli-obs" rows="2" placeholder="Anotações sobre o cliente..."></textarea></div>
+    <div class="fg"><label class="fl">Observações</label><textarea class="fi" id="cli-obs" rows="2" placeholder="Anotações..."></textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
       <button class="btn btn-ghost" onclick="closeModal('modal-cliente')">CANCELAR</button>
       <button class="btn btn-blue" onclick="salvarCliente()">SALVAR CLIENTE</button>
@@ -438,22 +330,23 @@ select.fi option{background:var(--bg2);color:var(--text)}
 
 <!-- MODAL SERVIÇO -->
 <div class="modal-bg" id="modal-servico">
-  <div class="modal" style="width:480px">
+  <div class="modal" style="width:480px" onclick="event.stopPropagation()">
     <div class="modal-title" id="modal-serv-title">NOVO SERVIÇO</div>
     <button class="modal-close" onclick="closeModal('modal-servico')">✕</button>
     <div class="fg"><label class="fl">Nome do serviço *</label><input class="fi" id="serv-nome" placeholder="Ex: Canais de TV, Internet, Câmeras..."></div>
     <div class="fr2">
       <div class="fg">
         <label class="fl">Cor</label>
-        <select class="fi" id="serv-cor">
-          <option value="#00aaff">Azul</option>
-          <option value="#00e5ff">Ciano</option>
-          <option value="#00e676">Verde</option>
-          <option value="#ffab00">Âmbar</option>
-          <option value="#a78bfa">Roxo</option>
-          <option value="#ff5252">Vermelho</option>
-          <option value="#ff6eb4">Rosa</option>
-        </select>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;padding:4px 0" id="cor-btns">
+          <button type="button" onclick="selecionarCor('#00aaff',this)" style="width:30px;height:30px;border-radius:50%;background:#00aaff;border:3px solid #fff;cursor:pointer" title="Azul"></button>
+          <button type="button" onclick="selecionarCor('#00e5ff',this)" style="width:30px;height:30px;border-radius:50%;background:#00e5ff;border:3px solid transparent;cursor:pointer" title="Ciano"></button>
+          <button type="button" onclick="selecionarCor('#00e676',this)" style="width:30px;height:30px;border-radius:50%;background:#00e676;border:3px solid transparent;cursor:pointer" title="Verde"></button>
+          <button type="button" onclick="selecionarCor('#ffab00',this)" style="width:30px;height:30px;border-radius:50%;background:#ffab00;border:3px solid transparent;cursor:pointer" title="Âmbar"></button>
+          <button type="button" onclick="selecionarCor('#a78bfa',this)" style="width:30px;height:30px;border-radius:50%;background:#a78bfa;border:3px solid transparent;cursor:pointer" title="Roxo"></button>
+          <button type="button" onclick="selecionarCor('#ff5252',this)" style="width:30px;height:30px;border-radius:50%;background:#ff5252;border:3px solid transparent;cursor:pointer" title="Vermelho"></button>
+          <button type="button" onclick="selecionarCor('#ff6eb4',this)" style="width:30px;height:30px;border-radius:50%;background:#ff6eb4;border:3px solid transparent;cursor:pointer" title="Rosa"></button>
+        </div>
+        <input type="hidden" id="serv-cor" value="#00aaff">
       </div>
       <div class="fg"><label class="fl">Ícone (emoji)</label><input class="fi" id="serv-icon" placeholder="📺" maxlength="2"></div>
     </div>
@@ -461,7 +354,7 @@ select.fi option{background:var(--bg2);color:var(--text)}
     <div style="margin-bottom:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <label class="fl" style="margin:0">Planos</label>
-        <button class="btn btn-ghost btn-sm" onclick="addPlanoRow()">+ ADICIONAR PLANO</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="addPlanoRow()">+ ADICIONAR PLANO</button>
       </div>
       <div id="planos-rows"></div>
     </div>
@@ -474,22 +367,22 @@ select.fi option{background:var(--bg2);color:var(--text)}
 
 <!-- MODAL VER CLIENTE -->
 <div class="modal-bg" id="modal-ver-cliente">
-  <div class="modal">
+  <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title">DETALHES DO CLIENTE</div>
     <button class="modal-close" onclick="closeModal('modal-ver-cliente')">✕</button>
     <div id="ver-cli-content"></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
       <button class="btn btn-ghost" onclick="closeModal('modal-ver-cliente')">FECHAR</button>
-      <button class="btn btn-amber btn-sm" id="btn-editar-cli" onclick="">EDITAR</button>
-      <button class="btn btn-green btn-sm" id="btn-msg-cli" onclick="">ENVIAR MSG</button>
+      <button class="btn btn-amber btn-sm" id="btn-editar-cli">EDITAR</button>
+      <button class="btn btn-green btn-sm" id="btn-msg-cli">ENVIAR MSG</button>
     </div>
   </div>
 </div>
 
 <!-- CONFIRM DELETE -->
 <div class="confirm-bg" id="confirm-del">
-  <div class="confirm-box">
-    <div style="font-size:24px;margin-bottom:8px">⚠️</div>
+  <div class="confirm-box" onclick="event.stopPropagation()">
+    <div style="font-size:28px;margin-bottom:8px">⚠️</div>
     <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px" id="confirm-msg">Confirmar exclusão?</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Esta ação não pode ser desfeita.</div>
     <div style="display:flex;gap:8px;justify-content:center">
@@ -501,332 +394,256 @@ select.fi option{background:var(--bg2);color:var(--text)}
 
 <script>
 // ===== STATE =====
-let state = {
-  servicos: [
-    {id:1, nome:'Canais de TV', cor:'#00aaff', icon:'📺', desc:'Pacotes de canais', planos:[
-      {id:1, nome:'TV Básico', valor:59},
-      {id:2, nome:'TV Premium', valor:299}
-    ]},
-    {id:2, nome:'Internet / Fibra', cor:'#00e5ff', icon:'🌐', desc:'Internet banda larga', planos:[
-      {id:3, nome:'Fibra 50M', valor:69},
-      {id:4, nome:'Fibra 100M', valor:89},
-      {id:5, nome:'Fibra 300M', valor:149}
-    ]}
+const DEFAULT_STATE = {
+  servicos:[
+    {id:1,nome:'Canais de TV',cor:'#00aaff',icon:'📺',desc:'Pacotes de canais',planos:[{id:1,nome:'TV Básico',valor:59},{id:2,nome:'TV Premium',valor:299}]},
+    {id:2,nome:'Internet / Fibra',cor:'#00e5ff',icon:'🌐',desc:'Internet banda larga',planos:[{id:3,nome:'Fibra 50M',valor:69},{id:4,nome:'Fibra 100M',valor:89},{id:5,nome:'Fibra 300M',valor:149}]}
   ],
-  clientes: [
-    {id:1, nome:'Carlos Silva', wpp:'(11)99999-0001', email:'carlos@email.com', doc:'', servicoId:1, planoId:2, valor:299, inicio:'2026-02-20', venc:'2026-03-20', pgto:'Pix', status:'ativo', end:'', obs:''},
-    {id:2, nome:'Ana Souza', wpp:'(11)99999-0002', email:'ana@email.com', doc:'', servicoId:2, planoId:4, valor:89, inicio:'2026-02-24', venc:'2026-03-24', pgto:'Pix', status:'ativo', end:'', obs:''},
-    {id:3, nome:'Roberto Nunes', wpp:'(11)99999-0003', email:'', doc:'', servicoId:1, planoId:1, valor:59, inicio:'2026-02-22', venc:'2026-03-22', pgto:'Dinheiro', status:'ativo', end:'', obs:''},
-    {id:4, nome:'Juliana Costa', wpp:'(11)99999-0004', email:'', doc:'', servicoId:2, planoId:3, valor:69, inicio:'2026-01-10', venc:'2026-02-10', pgto:'Pix', status:'inativo', end:'', obs:'Inadimplente'},
-    {id:5, nome:'Marcos Lima', wpp:'(11)99999-0005', email:'', doc:'', servicoId:1, planoId:2, valor:299, inicio:'2026-03-01', venc:'2026-04-01', pgto:'Cartão', status:'ativo', end:'', obs:''}
+  clientes:[
+    {id:1,nome:'Carlos Silva',wpp:'(11)99999-0001',email:'carlos@email.com',doc:'',servicoId:1,planoId:2,valor:299,inicio:'2026-02-20',venc:'2026-03-20',pgto:'Pix',status:'ativo',end:'',obs:''},
+    {id:2,nome:'Ana Souza',wpp:'(11)99999-0002',email:'',doc:'',servicoId:2,planoId:4,valor:89,inicio:'2026-02-24',venc:'2026-03-24',pgto:'Pix',status:'ativo',end:'',obs:''},
+    {id:3,nome:'Roberto Nunes',wpp:'(11)99999-0003',email:'',doc:'',servicoId:1,planoId:1,valor:59,inicio:'2026-02-22',venc:'2026-03-22',pgto:'Dinheiro',status:'ativo',end:'',obs:''},
+    {id:4,nome:'Juliana Costa',wpp:'(11)99999-0004',email:'',doc:'',servicoId:2,planoId:3,valor:69,inicio:'2026-01-10',venc:'2026-02-10',pgto:'Pix',status:'inativo',end:'',obs:'Inadimplente'},
+    {id:5,nome:'Marcos Lima',wpp:'(11)99999-0005',email:'',doc:'',servicoId:1,planoId:2,valor:299,inicio:'2026-03-01',venc:'2026-04-01',pgto:'Cartão',status:'ativo',end:'',obs:''}
   ],
-  config: {empresa:'EmyFlix', wpp:'', email:'', evoUrl:'', evoKey:'', evoInst:''},
-  notif: {
-    dono: [{id:'d1',label:'7 dias antes',ativo:true},{id:'d2',label:'3 dias antes',ativo:true},{id:'d3',label:'Dia do vencimento',ativo:true},{id:'d4',label:'+1 dia após',ativo:true},{id:'d5',label:'Resumo diário',ativo:true}],
-    cliente: [{id:'c1',label:'Boas-vindas',ativo:true},{id:'c2',label:'7 dias antes',ativo:true},{id:'c3',label:'3 dias antes',ativo:true},{id:'c4',label:'Dia do vencimento',ativo:true},{id:'c5',label:'Confirmação pagamento',ativo:false}]
-  },
-  editCliId: null,
-  editServId: null,
-  confirmCb: null,
-  filtroCliente: 'all',
-  searchCliente: ''
+  config:{empresa:'EmyFlix',wpp:'',email:'',evoUrl:'',evoKey:'',evoInst:''},
+  notif:{
+    dono:[{id:'d1',label:'7 dias antes',ativo:true},{id:'d2',label:'3 dias antes',ativo:true},{id:'d3',label:'Dia do vencimento',ativo:true},{id:'d4',label:'+1 dia após',ativo:true},{id:'d5',label:'Resumo diário',ativo:true}],
+    cliente:[{id:'c1',label:'Boas-vindas',ativo:true},{id:'c2',label:'7 dias antes',ativo:true},{id:'c3',label:'3 dias antes',ativo:true},{id:'c4',label:'Dia do vencimento',ativo:true},{id:'c5',label:'Confirmação pagamento',ativo:false}]
+  }
 };
 
-// Save/load from localStorage
-function saveState(){try{localStorage.setItem('emyflix_state', JSON.stringify(state))}catch(e){}}
+let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+let editCliId=null, editServId=null, filtroCliente='all', searchCliente='';
+let planosRows=[];
+
+function saveState(){try{localStorage.setItem('emyflix_v3',JSON.stringify({servicos:state.servicos,clientes:state.clientes,config:state.config,notif:state.notif}))}catch(e){}}
 function loadState(){
   try{
-    const s = localStorage.getItem('emyflix_state');
-    if(s) state = {...state, ...JSON.parse(s)};
+    const s=localStorage.getItem('emyflix_v3');
+    if(s){
+      const d=JSON.parse(s);
+      if(d.servicos&&d.servicos.length) state.servicos=d.servicos;
+      if(d.clientes) state.clientes=d.clientes;
+      if(d.config) state.config={...state.config,...d.config};
+      if(d.notif) state.notif=d.notif;
+    }
   }catch(e){}
 }
 loadState();
 
-// ===== HELPERS =====
-function getServico(id){return state.servicos.find(s=>s.id==id)}
-function getPlano(servId, planoId){
-  const s=getServico(servId);
-  return s ? s.planos.find(p=>p.id==planoId) : null;
+// HELPERS
+function getS(id){return state.servicos.find(s=>s.id==id)}
+function getP(sId,pId){const s=getS(sId);return s?s.planos.find(p=>p.id==pId):null}
+function diasVenc(v){
+  if(!v) return 999;
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const [y,m,d]=v.split('-');
+  const vd=new Date(+y,+m-1,+d); vd.setHours(0,0,0,0);
+  return Math.round((vd-hoje)/86400000);
 }
-function getDiasVenc(venc){
-  const hoje = new Date(); hoje.setHours(0,0,0,0);
-  const [y,m,d] = venc.split('-');
-  const v = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
-  v.setHours(0,0,0,0);
-  return Math.round((v-hoje)/(1000*60*60*24));
-}
-function getStatusReal(c){
+function stReal(c){
   if(c.status==='inativo') return 'inativo';
-  const d = getDiasVenc(c.venc);
+  const d=diasVenc(c.venc);
   if(d<0) return 'vencido';
   if(d<=7) return 'vencendo';
   return 'ativo';
 }
-function fmtData(d){if(!d)return '';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`}
-function fmtValor(v){return'R$ '+parseFloat(v).toFixed(2).replace('.',',')}
-function nextId(arr){return arr.length?Math.max(...arr.map(x=>x.id))+1:1}
-function tagStatus(st){
+function fmtD(v){if(!v)return '';const[y,m,d]=v.split('-');return`${d}/${m}/${y}`}
+function fmtV(v){return'R$ '+parseFloat(v||0).toFixed(2).replace('.',',')}
+function nxtId(arr){return arr.length?Math.max(...arr.map(x=>x.id))+1:1}
+function tagSt(st){
   if(st==='ativo') return '<span class="tag tok">ATIVO</span>';
   if(st==='vencendo') return '<span class="tag twarn">VENCENDO</span>';
-  if(st==='vencido'||st==='inativo') return '<span class="tag tbad">'+(st==='vencido'?'VENCIDO':'INATIVO')+'</span>';
-  return '';
+  return '<span class="tag tbad">'+(st==='vencido'?'VENCIDO':'INATIVO')+'</span>';
 }
 
-// ===== NAVIGATION =====
+// CLOCK
+function updateClock(){
+  const n=new Date();
+  const el=document.getElementById('clock');
+  if(el) el.textContent=`${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()} · ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+}
+updateClock(); setInterval(updateClock,30000);
+
+// NAVIGATION
 function goPage(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));
   document.getElementById('page-'+p).classList.add('active');
   const nb=document.getElementById('nb-'+p);
   if(nb) nb.classList.add('on');
-  renderPage(p);
-}
-function renderPage(p){
-  if(p==='dashboard') renderDashboard();
-  if(p==='clientes') renderClientes();
-  if(p==='servicos') renderServicos();
-  if(p==='notificacoes') renderNotif();
-  if(p==='relatorios') renderRelatorios();
-  if(p==='config') renderConfig();    // ← LINHA NOVA
+  ({dashboard:renderDash,clientes:renderCli,servicos:renderServ,notificacoes:renderNotif,relatorios:renderRel,config:renderConfig})[p]?.();
 }
 
-// ===== CLOCK =====
-function updateClock(){
-  const now=new Date();
-  const d=String(now.getDate()).padStart(2,'0');
-  const m=String(now.getMonth()+1).padStart(2,'0');
-  const y=now.getFullYear();
-  const h=String(now.getHours()).padStart(2,'0');
-  const mi=String(now.getMinutes()).padStart(2,'0');
-  const el=document.getElementById('clock');
-  if(el) el.textContent=`${d}/${m}/${y} · ${h}:${mi}`;
-}
-updateClock(); setInterval(updateClock,30000);
-
-// ===== DASHBOARD =====
-let chartLine=null, chartDona=null;
-function renderDashboard(){
-  const cls = state.clientes;
-  const ativos = cls.filter(c=>getStatusReal(c)==='ativo').length;
-  const vencendo = cls.filter(c=>getStatusReal(c)==='vencendo').length;
-  const vencidos = cls.filter(c=>['vencido','inativo'].includes(getStatusReal(c))).length;
-  const mrr = cls.filter(c=>getStatusReal(c)==='ativo').reduce((s,c)=>s+parseFloat(c.valor||0),0);
-
+// DASHBOARD
+let cLine=null,cDona=null;
+function renderDash(){
+  const cls=state.clientes;
+  const ativos=cls.filter(c=>stReal(c)==='ativo').length;
+  const venc=cls.filter(c=>stReal(c)==='vencendo').length;
+  const inat=cls.filter(c=>['vencido','inativo'].includes(stReal(c))).length;
+  const mrr=cls.filter(c=>stReal(c)==='ativo').reduce((s,c)=>s+parseFloat(c.valor||0),0);
   document.getElementById('dash-stats').innerHTML=`
-    <div class="sc bl"><div class="sl">Total clientes</div><div class="sv" style="color:var(--blue)">${cls.length}</div><div class="ss">Cadastrados</div><div class="sbar"><div class="sbf" style="width:${Math.min(cls.length*5,100)}%;background:var(--blue)"></div></div></div>
+    <div class="sc bl"><div class="sl">Total</div><div class="sv" style="color:var(--blue)">${cls.length}</div><div class="ss">Clientes</div><div class="sbar"><div class="sbf" style="width:${Math.min(cls.length*5,100)}%;background:var(--blue)"></div></div></div>
     <div class="sc gr" style="animation-delay:.06s"><div class="sl">Ativos</div><div class="sv" style="color:var(--green)">${ativos}</div><div class="ss">Em dia</div><div class="sbar"><div class="sbf" style="width:${cls.length?Math.round(ativos/cls.length*100):0}%;background:var(--green)"></div></div></div>
-    <div class="sc am" style="animation-delay:.12s"><div class="sl">Vencendo 7d</div><div class="sv" style="color:var(--amber)">${vencendo}</div><div class="ss">Precisam renovar</div><div class="sbar"><div class="sbf" style="width:${cls.length?Math.round(vencendo/cls.length*100):0}%;background:var(--amber)"></div></div></div>
-    <div class="sc pu" style="animation-delay:.18s"><div class="sl">MRR</div><div class="sv" style="color:var(--purple);font-size:18px">${fmtValor(mrr)}</div><div class="ss">Receita mensal</div><div class="sbar"><div class="sbf" style="width:70%;background:var(--purple)"></div></div></div>
-  `;
+    <div class="sc am" style="animation-delay:.12s"><div class="sl">Vencendo 7d</div><div class="sv" style="color:var(--amber)">${venc}</div><div class="ss">Renovar urgente</div><div class="sbar"><div class="sbf" style="width:${cls.length?Math.round(venc/cls.length*100):0}%;background:var(--amber)"></div></div></div>
+    <div class="sc pu" style="animation-delay:.18s"><div class="sl">MRR</div><div class="sv" style="color:var(--purple);font-size:18px">${fmtV(mrr)}</div><div class="ss">Receita mensal</div><div class="sbar"><div class="sbf" style="width:70%;background:var(--purple)"></div></div></div>`;
 
-  // Vencimentos
-  const proximos = cls.filter(c=>getStatusReal(c)==='vencendo'||getStatusReal(c)==='vencido')
-    .sort((a,b)=>getDiasVenc(a.venc)-getDiasVenc(b.venc)).slice(0,5);
-  
-  if(proximos.length===0){
-    document.getElementById('dash-venc').innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Nenhum vencimento próximo.</div>';
-  } else {
-    document.getElementById('dash-venc').innerHTML = proximos.map(c=>{
-      const s=getServico(c.servicoId);
-      const dias=getDiasVenc(c.venc);
-      const st=getStatusReal(c);
-      return `<div class="trow" style="grid-template-columns:1fr 100px 80px 70px 70px;border-bottom:0.5px solid var(--border)">
-        <span style="color:#d0e8ff;font-weight:700">${c.nome}</span>
-        <span style="display:flex;align-items:center"><span class="cdot" style="background:${s?s.cor:'#888'}"></span><span style="font-size:11px">${s?s.nome:'—'}</span></span>
-        <span>${fmtValor(c.valor)}</span>
-        <span style="font-size:10px;color:var(--text3)">${fmtData(c.venc)}</span>
-        ${tagStatus(st)}
-      </div>`;
-    }).join('');
-  }
+  const prox=cls.filter(c=>['vencendo','vencido'].includes(stReal(c))).sort((a,b)=>diasVenc(a.venc)-diasVenc(b.venc)).slice(0,5);
+  document.getElementById('dash-venc').innerHTML=prox.length?prox.map(c=>{
+    const s=getS(c.servicoId);
+    return `<div class="trow" style="grid-template-columns:1fr 110px 80px 70px 80px;border-bottom:0.5px solid var(--border)">
+      <span style="color:#d0e8ff;font-weight:700">${c.nome}</span>
+      <span style="display:flex;align-items:center;font-size:11px"><span class="cdot" style="background:${s?.cor||'#888'}"></span>${s?.nome||'—'}</span>
+      <span>${fmtV(c.valor)}</span>
+      <span style="font-size:10px;color:var(--text3)">${fmtD(c.venc)}</span>
+      ${tagSt(stReal(c))}
+    </div>`;
+  }).join(''):'<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Nenhum vencimento próximo.</div>';
 
-  // Alertas
-  const alertas = cls.filter(c=>getStatusReal(c)!=='ativo').slice(0,4);
-  document.getElementById('dash-alertas').innerHTML = alertas.length ? alertas.map(c=>{
-    const st=getStatusReal(c);
-    const dias=getDiasVenc(c.venc);
-    const cor=st==='vencido'?'var(--red)':st==='vencendo'?'var(--amber)':'var(--red)';
-    const msg=dias<0?`Vencido há ${Math.abs(dias)} dias`:`Vence em ${dias} dias`;
-    return `<div class="nr"><span class="nd" style="background:${cor}"></span><div><div style="font-size:12px;color:var(--text2)">${c.nome} — <span style="color:${cor};font-weight:700">${msg}</span></div><div style="font-size:9px;color:var(--text3);margin-top:2px;font-weight:600">${getServico(c.servicoId)?.nome||'—'} · ${fmtValor(c.valor)}</div></div></div>`;
-  }).join('') : '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px">Nenhum alerta.</div>';
+  const alertas=cls.filter(c=>stReal(c)!=='ativo').slice(0,4);
+  document.getElementById('dash-alertas').innerHTML=alertas.length?alertas.map(c=>{
+    const d=diasVenc(c.venc);
+    const cor=d<0?'var(--red)':'var(--amber)';
+    return `<div class="nr"><span class="nd" style="background:${cor}"></span><div><div style="font-size:12px;color:var(--text2)">${c.nome} — <span style="color:${cor};font-weight:700">${d<0?`Vencido há ${Math.abs(d)} dias`:`Vence em ${d} dias`}</span></div><div style="font-size:9px;color:var(--text3);margin-top:2px">${getS(c.servicoId)?.nome||'—'} · ${fmtV(c.valor)}</div></div></div>`;
+  }).join(''):'<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px">Nenhum alerta.</div>';
 
-  // Charts
-  const servData = state.servicos.map(s=>cls.filter(c=>c.servicoId===s.id).length);
-  const servColors = state.servicos.map(s=>s.cor);
-  const servNames = state.servicos.map(s=>s.nome);
-
-  if(chartLine){chartLine.destroy();chartLine=null;}
-  if(chartDona){chartDona.destroy();chartDona=null;}
-
-  if(document.getElementById('cLine')){
-    chartLine=new Chart(document.getElementById('cLine'),{type:'bar',
-      data:{labels:servNames,datasets:[{data:servData,backgroundColor:servColors.map(c=>c+'55'),borderColor:servColors,borderWidth:1.5,borderRadius:4}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#1e3a5a',font:{size:9,family:'Oxanium'}},grid:{display:false}},y:{ticks:{color:'#1e3a5a',font:{size:9}},grid:{color:'rgba(13,42,74,.5)'}}}}
-    });
-  }
-  if(document.getElementById('cDona')){
-    chartDona=new Chart(document.getElementById('cDona'),{type:'doughnut',
-      data:{labels:servNames,datasets:[{data:servData,backgroundColor:servColors,borderWidth:0,hoverOffset:3}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'74%'}
-    });
-  }
-  document.getElementById('dona-legend').innerHTML=state.servicos.map((s,i)=>`
-    <span style="display:flex;align-items:center;gap:7px;color:var(--text2)"><span class="cdot" style="background:${s.cor}"></span>${s.nome} <span style="color:${s.cor}">${servData[i]}</span></span>
-  `).join('');
+  const sData=state.servicos.map(s=>cls.filter(c=>c.servicoId===s.id).length);
+  const sCors=state.servicos.map(s=>s.cor);
+  const sNomes=state.servicos.map(s=>s.nome);
+  if(cLine){cLine.destroy();cLine=null;}
+  if(cDona){cDona.destroy();cDona=null;}
+  const gOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#1e3a5a',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#1e3a5a',font:{size:9}},grid:{color:'rgba(13,42,74,.5)'}}}};
+  cLine=new Chart(document.getElementById('cLine'),{type:'bar',data:{labels:sNomes,datasets:[{data:sData,backgroundColor:sCors.map(c=>c+'55'),borderColor:sCors,borderWidth:1.5,borderRadius:4}]},options:gOpts});
+  cDona=new Chart(document.getElementById('cDona'),{type:'doughnut',data:{labels:sNomes,datasets:[{data:sData,backgroundColor:sCors,borderWidth:0,hoverOffset:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'74%'}});
+  document.getElementById('dona-legend').innerHTML=state.servicos.map((s,i)=>`<span style="display:flex;align-items:center;gap:7px;color:var(--text2)"><span class="cdot" style="background:${s.cor}"></span>${s.nome} <span style="color:${s.cor}">${sData[i]}</span></span>`).join('');
 }
 
-// ===== CLIENTES =====
-function renderClientes(){
-  const cls = state.clientes;
-  const ativos=cls.filter(c=>getStatusReal(c)==='ativo').length;
-  const vencendo=cls.filter(c=>getStatusReal(c)==='vencendo').length;
-  const inativos=cls.filter(c=>['vencido','inativo'].includes(getStatusReal(c))).length;
-
+// CLIENTES
+function renderCli(){
+  const cls=state.clientes;
+  const ativos=cls.filter(c=>stReal(c)==='ativo').length;
+  const vend=cls.filter(c=>stReal(c)==='vencendo').length;
+  const inat=cls.filter(c=>['vencido','inativo'].includes(stReal(c))).length;
   document.getElementById('cli-stats').innerHTML=`
     <div class="sc bl"><div class="sl">Total</div><div class="sv" style="color:var(--blue)">${cls.length}</div><div class="ss">Clientes</div></div>
     <div class="sc gr" style="animation-delay:.06s"><div class="sl">Ativos</div><div class="sv" style="color:var(--green)">${ativos}</div><div class="ss">Em dia</div></div>
-    <div class="sc am" style="animation-delay:.12s"><div class="sl">Vencendo</div><div class="sv" style="color:var(--amber)">${vencendo}</div><div class="ss">7 dias</div></div>
-    <div class="sc re" style="animation-delay:.18s"><div class="sl">Inativos</div><div class="sv" style="color:var(--red)">${inativos}</div><div class="ss">Vencidos</div></div>
-  `;
+    <div class="sc am" style="animation-delay:.12s"><div class="sl">Vencendo</div><div class="sv" style="color:var(--amber)">${vend}</div><div class="ss">7 dias</div></div>
+    <div class="sc re" style="animation-delay:.18s"><div class="sl">Inativos</div><div class="sv" style="color:var(--red)">${inat}</div><div class="ss">Vencidos</div></div>`;
 
-  // Filtros dinâmicos por serviço
-  const filtros = `<button class="fb ${state.filtroCliente==='all'?'sel':''}" onclick="setFiltroCliente('all',this)">TODOS</button>`
-    + state.servicos.map(s=>`<button class="fb ${state.filtroCliente==s.id?'sel':''}" onclick="setFiltroCliente(${s.id},this)">${s.nome.toUpperCase().split(' ')[0]}</button>`).join('')
-    + `<button class="fb ${state.filtroCliente==='vencendo'?'sel':''}" onclick="setFiltroCliente('vencendo',this)">VENCENDO</button>`
-    + `<button class="fb ${state.filtroCliente==='inativo'?'sel':''}" onclick="setFiltroCliente('inativo',this)">INATIVOS</button>`;
-  document.getElementById('cli-filtros').innerHTML=filtros;
+  document.getElementById('cli-filtros').innerHTML=
+    `<button class="fb ${filtroCliente==='all'?'sel':''}" onclick="setFiltro('all',this)">TODOS</button>`+
+    state.servicos.map(s=>`<button class="fb ${filtroCliente==s.id?'sel':''}" onclick="setFiltro(${s.id},this)">${s.nome.split(' ')[0].toUpperCase()}</button>`).join('')+
+    `<button class="fb ${filtroCliente==='vencendo'?'sel':''}" onclick="setFiltro('vencendo',this)">VENCENDO</button>`+
+    `<button class="fb ${filtroCliente==='inativo'?'sel':''}" onclick="setFiltro('inativo',this)">INATIVOS</button>`;
 
-  document.getElementById('cli-thead').style.gridTemplateColumns='1fr 110px 100px 90px 70px 60px 90px';
-  document.getElementById('cli-thead').innerHTML='<span>Cliente</span><span>Serviço</span><span>Plano</span><span>WhatsApp</span><span>Valor</span><span>Vence</span><span>Ações</span>';
+  const el=document.getElementById('cli-thead');
+  el.style.gridTemplateColumns='1fr 110px 100px 90px 70px 65px 90px';
+  el.innerHTML='<span>Cliente</span><span>Serviço</span><span>Plano</span><span>WhatsApp</span><span>Valor</span><span>Vence</span><span>Ações</span>';
 
-  let lista = cls;
-  if(state.filtroCliente==='vencendo') lista=cls.filter(c=>getStatusReal(c)==='vencendo');
-  else if(state.filtroCliente==='inativo') lista=cls.filter(c=>['vencido','inativo'].includes(getStatusReal(c)));
-  else if(state.filtroCliente!=='all') lista=cls.filter(c=>c.servicoId==state.filtroCliente);
-  if(state.searchCliente) lista=lista.filter(c=>c.nome.toLowerCase().includes(state.searchCliente.toLowerCase())||c.wpp.includes(state.searchCliente));
+  let lista=cls;
+  if(filtroCliente==='vencendo') lista=cls.filter(c=>stReal(c)==='vencendo');
+  else if(filtroCliente==='inativo') lista=cls.filter(c=>['vencido','inativo'].includes(stReal(c)));
+  else if(filtroCliente!=='all') lista=cls.filter(c=>c.servicoId==filtroCliente);
+  if(searchCliente) lista=lista.filter(c=>c.nome.toLowerCase().includes(searchCliente.toLowerCase())||c.wpp.includes(searchCliente));
 
-  if(lista.length===0){
-    document.getElementById('cli-tbody').innerHTML='';
-    document.getElementById('cli-empty').style.display='block';
-  } else {
-    document.getElementById('cli-empty').style.display='none';
-    document.getElementById('cli-tbody').innerHTML=lista.map(c=>{
-      const s=getServico(c.servicoId);
-      const p=getPlano(c.servicoId,c.planoId);
-      const st=getStatusReal(c);
-      const dias=getDiasVenc(c.venc);
-      return `<div class="trow" style="grid-template-columns:1fr 110px 100px 90px 70px 60px 90px;border-bottom:0.5px solid var(--border)">
-        <span style="color:#d0e8ff;font-weight:700;cursor:pointer" onclick="verCliente(${c.id})">${c.nome}</span>
-        <span style="display:flex;align-items:center;font-size:11px"><span class="cdot" style="background:${s?s.cor:'#888'}"></span>${s?s.nome:'—'}</span>
-        <span style="font-size:11px">${p?p.nome:'—'}</span>
-        <span style="font-size:11px;color:var(--text3)">${c.wpp}</span>
-        <span>${fmtValor(c.valor)}</span>
-        <span style="font-size:10px;color:${dias<=7&&dias>=0?'var(--amber)':dias<0?'var(--red)':'var(--text3)'};font-weight:700">${fmtData(c.venc)}</span>
-        <div style="display:flex;gap:4px">
-          <button class="btn btn-ghost btn-sm" onclick="editarCliente(${c.id})" title="Editar">✏️</button>
-          <button class="btn btn-ghost btn-sm" onclick="confirmarDel('cliente',${c.id})" title="Excluir">🗑️</button>
-        </div>
-      </div>`;
-    }).join('');
-  }
+  document.getElementById('cli-empty').style.display=lista.length?'none':'block';
+  document.getElementById('cli-tbody').innerHTML=lista.map(c=>{
+    const s=getS(c.servicoId); const p=getP(c.servicoId,c.planoId); const st=stReal(c); const d=diasVenc(c.venc);
+    return `<div class="trow" style="grid-template-columns:1fr 110px 100px 90px 70px 65px 90px;border-bottom:0.5px solid var(--border)">
+      <span style="color:#d0e8ff;font-weight:700;cursor:pointer" onclick="verCliente(${c.id})">${c.nome}</span>
+      <span style="display:flex;align-items:center;font-size:11px"><span class="cdot" style="background:${s?.cor||'#888'}"></span>${s?.nome||'—'}</span>
+      <span style="font-size:11px">${p?.nome||'—'}</span>
+      <span style="font-size:11px;color:var(--text3)">${c.wpp}</span>
+      <span>${fmtV(c.valor)}</span>
+      <span style="font-size:10px;font-weight:700;color:${d<=7&&d>=0?'var(--amber)':d<0?'var(--red)':'var(--text3)'}">${fmtD(c.venc)}</span>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-ghost btn-sm" onclick="abrirModalCliente(${c.id})">✏️</button>
+        <button class="btn btn-ghost btn-sm" onclick="confirmarDel('cliente',${c.id})">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
 }
-function setFiltroCliente(f,el){state.filtroCliente=f;renderClientes();}
-function buscarCliente(q){state.searchCliente=q;renderClientes();}
+function setFiltro(f,el){filtroCliente=f;renderCli();}
+function buscarCliente(q){searchCliente=q;renderCli();}
 
-// ===== VER CLIENTE =====
+// VER CLIENTE
 function verCliente(id){
-  const c=state.clientes.find(x=>x.id===id);
-  if(!c) return;
-  const s=getServico(c.servicoId);
-  const p=getPlano(c.servicoId,c.planoId);
-  const st=getStatusReal(c);
-  const dias=getDiasVenc(c.venc);
+  const c=state.clientes.find(x=>x.id===id); if(!c) return;
+  const s=getS(c.servicoId); const p=getP(c.servicoId,c.planoId); const st=stReal(c); const d=diasVenc(c.venc);
   document.getElementById('ver-cli-content').innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
       <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)">
-        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;font-weight:700;letter-spacing:.08em">DADOS PESSOAIS</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.08em;margin-bottom:6px">DADOS PESSOAIS</div>
         <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">${c.nome}</div>
         <div style="font-size:12px;color:var(--text2)">📱 ${c.wpp}</div>
         ${c.email?`<div style="font-size:12px;color:var(--text2)">✉️ ${c.email}</div>`:''}
-        ${c.doc?`<div style="font-size:12px;color:var(--text2)">📋 ${c.doc}</div>`:''}
         ${c.end?`<div style="font-size:12px;color:var(--text2)">📍 ${c.end}</div>`:''}
       </div>
       <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border)">
-        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;font-weight:700;letter-spacing:.08em">PLANO</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span class="cdot" style="background:${s?s.cor:'#888'}"></span><span style="font-size:13px;font-weight:700;color:var(--text)">${s?s.nome:'—'}</span></div>
-        <div style="font-size:12px;color:var(--text2)">Plano: ${p?p.nome:'—'}</div>
-        <div style="font-size:14px;font-weight:800;color:${s?s.cor:'#888'};margin-top:4px">${fmtValor(c.valor)}/mês</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px">Pagamento: ${c.pgto}</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.08em;margin-bottom:6px">PLANO</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span class="cdot" style="background:${s?.cor||'#888'}"></span><span style="font-size:13px;font-weight:700;color:var(--text)">${s?.nome||'—'}</span></div>
+        <div style="font-size:12px;color:var(--text2)">${p?.nome||'—'}</div>
+        <div style="font-size:16px;font-weight:800;color:${s?.cor||'#888'};margin-top:4px">${fmtV(c.valor)}/mês</div>
+        <div style="font-size:11px;color:var(--text3)">Pagamento: ${c.pgto}</div>
       </div>
     </div>
-    <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid ${st==='ativo'?'rgba(0,230,118,.2)':st==='vencendo'?'rgba(255,171,0,.2)':'rgba(255,82,82,.2)'};margin-bottom:${c.obs?'10px':'0'}">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.08em;margin-bottom:4px">STATUS</div>
-          ${tagStatus(st)}
-          <div style="font-size:12px;color:var(--text2);margin-top:4px">Vencimento: <strong>${fmtData(c.venc)}</strong>${dias>=0?` (${dias} dias)`:`(vencido há ${Math.abs(dias)} dias)`}</div>
-          <div style="font-size:11px;color:var(--text3)">Início: ${fmtData(c.inicio)}</div>
-        </div>
-      </div>
-    </div>
-    ${c.obs?`<div style="background:var(--bg2);border-radius:8px;padding:10px;border:0.5px solid var(--border)"><div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px">OBSERVAÇÕES</div><div style="font-size:12px;color:var(--text2)">${c.obs}</div></div>`:''}
-  `;
-  document.getElementById('btn-editar-cli').onclick=()=>{closeModal('modal-ver-cliente');editarCliente(id);};
-  document.getElementById('btn-msg-cli').onclick=()=>enviarMsgCliente(id);
+    <div style="background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid ${st==='ativo'?'rgba(0,230,118,.2)':st==='vencendo'?'rgba(255,171,0,.2)':'rgba(255,82,82,.2)'}">
+      ${tagSt(st)}
+      <div style="font-size:12px;color:var(--text2);margin-top:6px">Vencimento: <strong>${fmtD(c.venc)}</strong> ${d>=0?`(${d} dias)`:`(vencido há ${Math.abs(d)} dias)`}</div>
+      ${c.obs?`<div style="font-size:12px;color:var(--text3);margin-top:4px">📝 ${c.obs}</div>`:''}
+    </div>`;
+  document.getElementById('btn-editar-cli').onclick=()=>{closeModal('modal-ver-cliente');abrirModalCliente(id);};
+  document.getElementById('btn-msg-cli').onclick=()=>enviarMsg(id);
   openModal('modal-ver-cliente');
 }
 
-// ===== MODAL CLIENTE =====
-function abrirModalCliente(id=null){
-  state.editCliId=id;
+// MODAL CLIENTE
+function abrirModalCliente(id){
+  editCliId=id;
   document.getElementById('modal-cli-title').textContent=id?'EDITAR CLIENTE':'NOVO CLIENTE';
-  // Preenche serviços
   const sel=document.getElementById('cli-servico');
   sel.innerHTML='<option value="">Selecione...</option>'+state.servicos.map(s=>`<option value="${s.id}">${s.nome}</option>`).join('');
-  // Limpa campos
-  ['cli-nome','cli-wpp','cli-email','cli-doc','cli-valor','cli-end','cli-obs'].forEach(fieldId=>{const el=document.getElementById(fieldId);const el=document.getElementById(id);if(el)el.value='';});
+  // limpar campos
+  ['cli-nome','cli-wpp','cli-email','cli-doc','cli-valor','cli-end','cli-obs'].forEach(fid=>{document.getElementById(fid).value='';});
   document.getElementById('cli-plano').innerHTML='<option value="">Selecione o serviço primeiro</option>';
   document.getElementById('cli-inicio').value='';
   document.getElementById('cli-venc').value='';
   document.getElementById('cli-pgto').value='Pix';
   document.getElementById('cli-status').value='ativo';
-
   if(id){
     const c=state.clientes.find(x=>x.id===id);
     if(c){
-      document.getElementById('cli-nome').value=c.nome;
-      document.getElementById('cli-wpp').value=c.wpp;
+      document.getElementById('cli-nome').value=c.nome||'';
+      document.getElementById('cli-wpp').value=c.wpp||'';
       document.getElementById('cli-email').value=c.email||'';
       document.getElementById('cli-doc').value=c.doc||'';
-      document.getElementById('cli-valor').value=c.valor;
+      document.getElementById('cli-valor').value=c.valor||'';
       document.getElementById('cli-inicio').value=c.inicio||'';
       document.getElementById('cli-venc').value=c.venc||'';
       document.getElementById('cli-end').value=c.end||'';
       document.getElementById('cli-obs').value=c.obs||'';
       document.getElementById('cli-pgto').value=c.pgto||'Pix';
       document.getElementById('cli-status').value=c.status||'ativo';
-      document.getElementById('cli-servico').value=c.servicoId||'';
+      sel.value=c.servicoId||'';
       atualizarPlanosModal();
-      setTimeout(()=>{
-        document.getElementById('cli-plano').value=c.planoId||'';
-      },50);
+      setTimeout(()=>document.getElementById('cli-plano').value=c.planoId||'',60);
     }
   }
   openModal('modal-cliente');
 }
-function editarCliente(id){abrirModalCliente(id);}
 function atualizarPlanosModal(){
   const sId=document.getElementById('cli-servico').value;
-  const s=getServico(parseInt(sId));
+  const s=getS(parseInt(sId));
   const sel=document.getElementById('cli-plano');
   if(!s||!s.planos.length){sel.innerHTML='<option>Selecione o serviço primeiro</option>';return;}
   sel.innerHTML=s.planos.map(p=>`<option value="${p.id}" data-val="${p.valor}">${p.nome} — R$ ${p.valor}</option>`).join('');
   atualizarValorModal();
 }
 function atualizarValorModal(){
-  const sel=document.getElementById('cli-plano');
-  const opt=sel.selectedOptions[0];
-  if(opt&&opt.dataset.val) document.getElementById('cli-valor').value=opt.dataset.val;
+  const opt=document.getElementById('cli-plano').selectedOptions[0];
+  if(opt?.dataset.val) document.getElementById('cli-valor').value=opt.dataset.val;
 }
 function salvarCliente(){
   const nome=document.getElementById('cli-nome').value.trim();
@@ -834,276 +651,196 @@ function salvarCliente(){
   const sId=parseInt(document.getElementById('cli-servico').value);
   const pId=parseInt(document.getElementById('cli-plano').value);
   const venc=document.getElementById('cli-venc').value;
-  if(!nome||!wpp||!sId||!pId||!venc){alert('Preencha os campos obrigatórios: Nome, WhatsApp, Serviço, Plano e Vencimento.');return;}
-  const dados={
-    nome, wpp,
-    email:document.getElementById('cli-email').value,
-    doc:document.getElementById('cli-doc').value,
-    servicoId:sId, planoId:pId,
-    valor:parseFloat(document.getElementById('cli-valor').value)||0,
-    inicio:document.getElementById('cli-inicio').value,
-    venc,
-    pgto:document.getElementById('cli-pgto').value,
-    status:document.getElementById('cli-status').value,
-    end:document.getElementById('cli-end').value,
-    obs:document.getElementById('cli-obs').value
-  };
-  if(state.editCliId){
-    const idx=state.clientes.findIndex(x=>x.id===state.editCliId);
+  if(!nome||!wpp||!sId||!pId||!venc){alert('Preencha: Nome, WhatsApp, Serviço, Plano e Vencimento.');return;}
+  const dados={nome,wpp,email:document.getElementById('cli-email').value,doc:document.getElementById('cli-doc').value,servicoId:sId,planoId:pId,valor:parseFloat(document.getElementById('cli-valor').value)||0,inicio:document.getElementById('cli-inicio').value,venc,pgto:document.getElementById('cli-pgto').value,status:document.getElementById('cli-status').value,end:document.getElementById('cli-end').value,obs:document.getElementById('cli-obs').value};
+  if(editCliId){
+    const idx=state.clientes.findIndex(x=>x.id===editCliId);
     if(idx>-1) state.clientes[idx]={...state.clientes[idx],...dados};
-  } else {
-    dados.id=nextId(state.clientes);
-    state.clientes.push(dados);
-  }
-  saveState();
-  closeModal('modal-cliente');
-  renderClientes();
-  renderDashboard();
+  } else {dados.id=nxtId(state.clientes);state.clientes.push(dados);}
+  saveState(); closeModal('modal-cliente'); renderCli(); renderDash();
 }
 
-// ===== SERVIÇOS =====
-function renderServicos(){
+// SERVIÇOS
+function renderServ(){
   document.getElementById('servicos-grid').innerHTML=state.servicos.map(s=>`
     <div class="serv-card">
       <div class="serv-actions">
-        <button class="btn btn-ghost btn-sm" onclick="editarServico(${s.id})" title="Editar">✏️</button>
-        <button class="btn btn-ghost btn-sm" onclick="confirmarDel('servico',${s.id})" title="Excluir">🗑️</button>
+        <button class="btn btn-ghost btn-sm" onclick="abrirModalServico(${s.id})">✏️</button>
+        <button class="btn btn-ghost btn-sm" onclick="confirmarDel('servico',${s.id})">🗑️</button>
       </div>
-      <div style="font-size:24px;margin-bottom:8px">${s.icon||'📦'}</div>
-      <div class="serv-name" style="color:${s.cor}">${s.nome}</div>
-      <div class="serv-count">${state.clientes.filter(c=>c.servicoId===s.id).length} clientes · ${s.planos.length} planos</div>
+      <div style="font-size:26px;margin-bottom:8px">${s.icon||'📦'}</div>
+      <div style="font-size:14px;font-weight:700;color:${s.cor};margin-bottom:4px">${s.nome}</div>
+      <div style="font-size:11px;color:var(--text3)">${state.clientes.filter(c=>c.servicoId===s.id).length} clientes · ${s.planos.length} planos</div>
       ${s.desc?`<div style="font-size:11px;color:var(--text3);margin-top:4px">${s.desc}</div>`:''}
       <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px">
         ${s.planos.map(p=>`<span style="background:${s.cor}22;color:${s.cor};border:0.5px solid ${s.cor}44;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">${p.nome} · R$${p.valor}</span>`).join('')}
       </div>
-    </div>
-  `).join('');
-
+    </div>`).join('');
   document.getElementById('planos-lista').innerHTML=state.servicos.map(s=>`
     <div style="margin-bottom:14px">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><span class="cdot" style="background:${s.cor}"></span><span style="font-size:12px;font-weight:700;color:${s.cor}">${s.nome}</span></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px">
-        ${s.planos.map(p=>`
-          <div style="background:var(--bg2);border:0.5px solid ${s.cor}33;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center">
-            <div><div style="font-size:12px;font-weight:700;color:var(--text)">${p.nome}</div><div style="font-size:10px;color:var(--text3)">${state.clientes.filter(c=>c.planoId===p.id).length} clientes</div></div>
-            <div style="font-size:16px;font-weight:800;color:${s.cor}">R$${p.valor}</div>
-          </div>
-        `).join('')}
+        ${s.planos.map(p=>`<div style="background:var(--bg2);border:0.5px solid ${s.cor}33;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;font-weight:700;color:var(--text)">${p.nome}</div><div style="font-size:10px;color:var(--text3)">${state.clientes.filter(c=>c.planoId===p.id).length} clientes</div></div><div style="font-size:16px;font-weight:800;color:${s.cor}">R$${p.valor}</div></div>`).join('')}
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ===== MODAL SERVIÇO =====
-let planosRows=[];
-function abrirModalServico(id=null){
-  state.editServId=id;
+// MODAL SERVIÇO
+function selecionarCor(cor,btn){
+  document.getElementById('serv-cor').value=cor;
+  document.querySelectorAll('#cor-btns button').forEach(b=>b.style.border='3px solid transparent');
+  btn.style.border='3px solid #fff';
+}
+function abrirModalServico(id){
+  editServId=id;
   document.getElementById('modal-serv-title').textContent=id?'EDITAR SERVIÇO':'NOVO SERVIÇO';
+  document.getElementById('serv-nome').value='';
+  document.getElementById('serv-icon').value='';
+  document.getElementById('serv-desc').value='';
+  document.getElementById('serv-cor').value='#00aaff';
   planosRows=[];
   if(id){
-    const s=getServico(id);
+    const s=getS(id);
     if(s){
       document.getElementById('serv-nome').value=s.nome;
-      document.getElementById('serv-cor').value=s.cor;
       document.getElementById('serv-icon').value=s.icon||'';
       document.getElementById('serv-desc').value=s.desc||'';
+      document.getElementById('serv-cor').value=s.cor;
       planosRows=s.planos.map(p=>({...p}));
+      // marcar cor selecionada
+      document.querySelectorAll('#cor-btns button').forEach(b=>{
+        b.style.border=b.getAttribute('onclick').includes(s.cor)?'3px solid #fff':'3px solid transparent';
+      });
     }
   } else {
-    document.getElementById('serv-nome').value='';
-    document.getElementById('serv-cor').value='#00aaff';
-    document.getElementById('serv-icon').value='';
-    document.getElementById('serv-desc').value='';
+    document.querySelectorAll('#cor-btns button').forEach((b,i)=>b.style.border=i===0?'3px solid #fff':'3px solid transparent');
     planosRows=[{id:1,nome:'',valor:''}];
   }
   renderPlanosRows();
   openModal('modal-servico');
 }
-function editarServico(id){abrirModalServico(id);}
 function renderPlanosRows(){
   document.getElementById('planos-rows').innerHTML=planosRows.map((p,i)=>`
-    <div style="display:grid;grid-template-columns:1fr 120px 36px;gap:6px;margin-bottom:6px" id="plano-row-${i}">
-      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Nome do plano" value="${p.nome||''}" onblur="planosRows[${i}].nome=this.value" onchange="planosRows[${i}].nome=this.value">
-      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Valor R$" type="number" value="${p.valor||''}" onblur="planosRows[${i}].valor=parseFloat(this.value)||0" onchange="planosRows[${i}].valor=parseFloat(this.value)||0">
-      <button class="btn btn-red btn-sm" onclick="removePlanoRow(${i})" style="padding:7px;font-size:14px" type="button">✕</button>
-    </div>
-  `).join('');
+    <div style="display:grid;grid-template-columns:1fr 120px 36px;gap:6px;margin-bottom:6px">
+      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Nome do plano" value="${p.nome||''}" onchange="planosRows[${i}].nome=this.value" onblur="planosRows[${i}].nome=this.value">
+      <input class="fi" style="padding:7px 10px;font-size:12px" placeholder="Valor R$" type="number" value="${p.valor||''}" onchange="planosRows[${i}].valor=parseFloat(this.value)||0" onblur="planosRows[${i}].valor=parseFloat(this.value)||0">
+      <button type="button" class="btn btn-red btn-sm" onclick="removePlano(${i})" style="padding:6px">✕</button>
+    </div>`).join('');
 }
-function addPlanoRow(){
-  planosRows.push({id:nextId(planosRows),nome:'',valor:''});
-  renderPlanosRows();
-  // Focus no novo campo
-  setTimeout(()=>{
-    const rows=document.querySelectorAll('#planos-rows .fi');
-    if(rows.length) rows[rows.length-2].focus();
-  },50);
-}
-function removePlanoRow(i){
-  if(planosRows.length>1){planosRows.splice(i,1);renderPlanosRows();}
-}
+function addPlanoRow(){planosRows.push({id:nxtId(planosRows),nome:'',valor:''});renderPlanosRows();setTimeout(()=>{const r=document.querySelectorAll('#planos-rows .fi');if(r.length)r[r.length-2].focus();},50);}
+function removePlano(i){if(planosRows.length>1){planosRows.splice(i,1);renderPlanosRows();}}
 function salvarServico(){
   const nome=document.getElementById('serv-nome').value.trim();
   if(!nome){alert('Digite o nome do serviço.');return;}
   const dados={nome,cor:document.getElementById('serv-cor').value,icon:document.getElementById('serv-icon').value,desc:document.getElementById('serv-desc').value,planos:planosRows.filter(p=>p.nome)};
-  if(state.editServId){
-    const idx=state.servicos.findIndex(x=>x.id===state.editServId);
+  if(editServId){
+    const idx=state.servicos.findIndex(x=>x.id===editServId);
     if(idx>-1) state.servicos[idx]={...state.servicos[idx],...dados};
-  } else {
-    dados.id=nextId(state.servicos);
-    state.servicos.push(dados);
-  }
-  saveState();
-  closeModal('modal-servico');
-  renderServicos();
-  renderDashboard();
+  } else {dados.id=nxtId(state.servicos);state.servicos.push(dados);}
+  saveState(); closeModal('modal-servico'); renderServ(); renderDash();
 }
 
-// ===== NOTIFICAÇÕES =====
+// NOTIFICAÇÕES
 function renderNotif(){
-  const rowDono=(item,i)=>`
+  document.getElementById('notif-dono').innerHTML=state.notif.dono.map((item,i)=>`
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)">
-      <div style="font-size:12px;color:var(--text);font-weight:500">${item.label}</div>
+      <div style="font-size:12px;color:var(--text)">${item.label}</div>
       <div class="tog ${item.ativo?'on':''}" onclick="toggleNotif('dono',${i})"><div class="tog-track"></div><div class="tog-knob"></div></div>
-    </div>`;
-  const rowCli=(item,i)=>`
+    </div>`).join('');
+  document.getElementById('notif-cliente').innerHTML=state.notif.cliente.map((item,i)=>`
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)">
-      <div style="font-size:12px;color:var(--text);font-weight:500">${item.label}</div>
+      <div style="font-size:12px;color:var(--text)">${item.label}</div>
       <div class="tog ${item.ativo?'on':''}" onclick="toggleNotif('cliente',${i})"><div class="tog-track"></div><div class="tog-knob"></div></div>
-    </div>`;
-  document.getElementById('notif-dono').innerHTML=state.notif.dono.map(rowDono).join('');
-  document.getElementById('notif-cliente').innerHTML=state.notif.cliente.map(rowCli).join('');
+    </div>`).join('');
 }
-function toggleNotif(tipo,i){
-  state.notif[tipo][i].ativo=!state.notif[tipo][i].ativo;
-  renderNotif();
-}
+function toggleNotif(tipo,i){state.notif[tipo][i].ativo=!state.notif[tipo][i].ativo;renderNotif();}
 function salvarNotif(){saveState();alert('Configurações salvas!');}
 
-// ===== RELATÓRIOS =====
+// RELATÓRIOS
 let cRec=null,cStatus=null;
-function renderRelatorios(){
+function renderRel(){
   const cls=state.clientes;
-  const mrr=cls.filter(c=>getStatusReal(c)==='ativo').reduce((s,c)=>s+parseFloat(c.valor||0),0);
-  const ativos=cls.filter(c=>getStatusReal(c)==='ativo').length;
-  const vencendo=cls.filter(c=>getStatusReal(c)==='vencendo').length;
-  const inativos=cls.filter(c=>['vencido','inativo'].includes(getStatusReal(c))).length;
-
+  const mrr=cls.filter(c=>stReal(c)==='ativo').reduce((s,c)=>s+parseFloat(c.valor||0),0);
+  const ativos=cls.filter(c=>stReal(c)==='ativo').length;
+  const vend=cls.filter(c=>stReal(c)==='vencendo').length;
+  const inat=cls.filter(c=>['vencido','inativo'].includes(stReal(c))).length;
   document.getElementById('rel-stats').innerHTML=`
-    <div class="sc gr"><div class="sl">MRR</div><div class="sv" style="color:var(--green);font-size:20px">${fmtValor(mrr)}</div><div class="ss">Receita mensal</div></div>
+    <div class="sc gr"><div class="sl">MRR</div><div class="sv" style="color:var(--green);font-size:20px">${fmtV(mrr)}</div><div class="ss">Receita mensal</div></div>
     <div class="sc bl" style="animation-delay:.06s"><div class="sl">Ativos</div><div class="sv" style="color:var(--blue)">${ativos}</div><div class="ss">Clientes ativos</div></div>
-    <div class="sc am" style="animation-delay:.12s"><div class="sl">Vencendo</div><div class="sv" style="color:var(--amber)">${vencendo}</div><div class="ss">Nos próximos 7d</div></div>
-    <div class="sc re" style="animation-delay:.18s"><div class="sl">Inativos</div><div class="sv" style="color:var(--red)">${inativos}</div><div class="ss">Vencidos/cancelados</div></div>
-  `;
-
-  // Por serviço
+    <div class="sc am" style="animation-delay:.12s"><div class="sl">Vencendo</div><div class="sv" style="color:var(--amber)">${vend}</div><div class="ss">Próximos 7d</div></div>
+    <div class="sc re" style="animation-delay:.18s"><div class="sl">Inativos</div><div class="sv" style="color:var(--red)">${inat}</div><div class="ss">Vencidos</div></div>`;
   document.getElementById('rel-por-servico').innerHTML=state.servicos.map(s=>{
-    const total=cls.filter(c=>c.servicoId===s.id).length;
-    const mrrs=cls.filter(c=>c.servicoId===s.id&&getStatusReal(c)==='ativo').reduce((acc,c)=>acc+parseFloat(c.valor||0),0);
-    const pct=cls.length?Math.round(total/cls.length*100):0;
-    return `<div style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:4px">
-        <span style="display:flex;align-items:center;gap:6px"><span class="cdot" style="background:${s.cor}"></span><span style="color:var(--text)">${s.nome}</span></span>
-        <span style="color:${s.cor}">${total} clientes · ${fmtValor(mrrs)}/mês</span>
-      </div>
-      <div class="sbar"><div class="sbf" style="width:${pct}%;background:${s.cor}"></div></div>
-    </div>`;
+    const tot=cls.filter(c=>c.servicoId===s.id).length;
+    const mrrs=cls.filter(c=>c.servicoId===s.id&&stReal(c)==='ativo').reduce((a,c)=>a+parseFloat(c.valor||0),0);
+    const pct=cls.length?Math.round(tot/cls.length*100):0;
+    return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:4px"><span style="display:flex;align-items:center;gap:6px"><span class="cdot" style="background:${s.cor}"></span><span style="color:var(--text)">${s.nome}</span></span><span style="color:${s.cor}">${tot} clientes · ${fmtV(mrrs)}/mês</span></div><div class="sbar"><div class="sbf" style="width:${pct}%;background:${s.cor}"></div></div></div>`;
   }).join('');
-
-  if(cRec){cRec.destroy();cRec=null;}
-  if(cStatus){cStatus.destroy();cStatus=null;}
-
-  const servNomes=state.servicos.map(s=>s.nome.split('/')[0].trim());
-  const servMRR=state.servicos.map(s=>cls.filter(c=>c.servicoId===s.id&&getStatusReal(c)==='ativo').reduce((acc,c)=>acc+parseFloat(c.valor||0),0));
-  const servCores=state.servicos.map(s=>s.cor);
-
-  if(document.getElementById('cRec')){
-    cRec=new Chart(document.getElementById('cRec'),{type:'bar',
-      data:{labels:servNomes,datasets:[{data:servMRR,backgroundColor:servCores.map(c=>c+'66'),borderColor:servCores,borderWidth:1.5,borderRadius:4}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#1e3a5a',font:{size:9,family:'Oxanium'}},grid:{display:false}},y:{ticks:{color:'#1e3a5a',font:{size:9}},grid:{color:'rgba(13,42,74,.5)'}}}}
-    });
-  }
-  if(document.getElementById('cStatus')){
-    cStatus=new Chart(document.getElementById('cStatus'),{type:'doughnut',
-      data:{labels:['Ativos','Vencendo','Inativos'],datasets:[{data:[ativos,vencendo,inativos],backgroundColor:['#00e676','#ffab00','#ff5252'],borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'68%'}
-    });
-  }
+  if(cRec){cRec.destroy();cRec=null;} if(cStatus){cStatus.destroy();cStatus=null;}
+  const gOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#1e3a5a',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#1e3a5a',font:{size:9}},grid:{color:'rgba(13,42,74,.5)'}}}};
+  cRec=new Chart(document.getElementById('cRec'),{type:'bar',data:{labels:state.servicos.map(s=>s.nome.split('/')[0].trim()),datasets:[{data:state.servicos.map(s=>cls.filter(c=>c.servicoId===s.id&&stReal(c)==='ativo').reduce((a,c)=>a+parseFloat(c.valor||0),0)),backgroundColor:state.servicos.map(s=>s.cor+'66'),borderColor:state.servicos.map(s=>s.cor),borderWidth:1.5,borderRadius:4}]},options:gOpts});
+  cStatus=new Chart(document.getElementById('cStatus'),{type:'doughnut',data:{labels:['Ativos','Vencendo','Inativos'],datasets:[{data:[ativos,vend,inat],backgroundColor:['#00e676','#ffab00','#ff5252'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'68%'}});
 }
 
-// ===== CONFIG =====
+// CONFIG
 function renderConfig(){
-  document.getElementById('cfg-empresa').value = state.config.empresa || '';
-  document.getElementById('cfg-wpp').value = state.config.wpp || '';
-  document.getElementById('cfg-email').value = state.config.email || '';
-  document.getElementById('cfg-evo-url').value = state.config.evoUrl || '';
-  document.getElementById('cfg-evo-key').value = state.config.evoKey || '';
-  document.getElementById('cfg-evo-inst').value = state.config.evoInst || '';
+  document.getElementById('cfg-empresa').value=state.config.empresa||'';
+  document.getElementById('cfg-wpp').value=state.config.wpp||'';
+  document.getElementById('cfg-email').value=state.config.email||'';
+  document.getElementById('cfg-evo-url').value=state.config.evoUrl||'';
+  document.getElementById('cfg-evo-key').value=state.config.evoKey||'';
+  document.getElementById('cfg-evo-inst').value=state.config.evoInst||'';
 }
 function salvarConfig(){
-  state.config={
-    empresa:document.getElementById('cfg-empresa').value,
-    wpp:document.getElementById('cfg-wpp').value,
-    email:document.getElementById('cfg-email').value,
-    evoUrl:document.getElementById('cfg-evo-url').value,
-    evoKey:document.getElementById('cfg-evo-key').value,
-    evoInst:document.getElementById('cfg-evo-inst').value
-  };
-  saveState();
-  alert('Configurações salvas!');
+  state.config={empresa:document.getElementById('cfg-empresa').value,wpp:document.getElementById('cfg-wpp').value,email:document.getElementById('cfg-email').value,evoUrl:document.getElementById('cfg-evo-url').value,evoKey:document.getElementById('cfg-evo-key').value,evoInst:document.getElementById('cfg-evo-inst').value};
+  saveState(); alert('Configurações salvas!');
 }
 function testarWpp(){
   const url=document.getElementById('cfg-evo-url').value;
   const key=document.getElementById('cfg-evo-key').value;
-  if(!url||!key){alert('Preencha a URL e a API Key da Evolution API.');return;}
-  document.getElementById('wpp-status').innerHTML='<span style="color:var(--amber)">Testando conexão...</span>';
+  if(!url||!key){alert('Preencha URL e API Key.');return;}
+  document.getElementById('wpp-status').innerHTML='<span style="color:var(--amber)">Testando...</span>';
   fetch(`${url}/instance/fetchInstances`,{headers:{'apikey':key}})
     .then(r=>r.json())
-    .then(d=>{document.getElementById('wpp-status').innerHTML='<span style="color:var(--green)">✓ Conectado com sucesso!</span>';document.getElementById('int-evo').innerHTML='<span class="tag tok">ATIVO</span>';})
-    .catch(e=>{document.getElementById('wpp-status').innerHTML='<span style="color:var(--red)">✗ Erro ao conectar. Verifique a URL e Key.</span>';});
+    .then(()=>{document.getElementById('wpp-status').innerHTML='<span style="color:var(--green)">✓ Conectado!</span>';document.getElementById('int-evo').innerHTML='<span class="tag tok">ATIVO</span>';})
+    .catch(()=>{document.getElementById('wpp-status').innerHTML='<span style="color:var(--red)">✗ Erro. Verifique URL e Key.</span>';});
 }
 
-// ===== ENVIAR MSG =====
-function enviarMsgCliente(id){
-  const c=state.clientes.find(x=>x.id===id);
-  if(!c){return;}
-  const s=getServico(c.servicoId);
-  const dias=getDiasVenc(c.venc);
-  const msg=`Olá ${c.nome}! Seu plano de ${s?s.nome:'serviço'} vence em ${dias} dias (${fmtData(c.venc)}). Valor: ${fmtValor(c.valor)}. Entre em contato para renovar!`;
+// ENVIAR MSG
+function enviarMsg(id){
+  const c=state.clientes.find(x=>x.id===id); if(!c) return;
+  const s=getS(c.servicoId); const d=diasVenc(c.venc);
+  const msg=`Olá ${c.nome}! Seu plano de ${s?.nome||'serviço'} vence em ${d} dias (${fmtD(c.venc)}). Valor: ${fmtV(c.valor)}. Entre em contato para renovar!`;
   const {evoUrl,evoKey,evoInst}=state.config;
-  if(!evoUrl||!evoKey||!evoInst){
-    alert('Configure a Evolution API nas Configurações primeiro.');return;
-  }
-  fetch(`${evoUrl}/message/sendText/${evoInst}`,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','apikey':evoKey},
-    body:JSON.stringify({number:c.wpp.replace(/\D/g,''),text:msg})
-  }).then(r=>r.json()).then(()=>alert('Mensagem enviada!')).catch(()=>alert('Erro ao enviar mensagem.'));
+  if(!evoUrl||!evoKey||!evoInst){alert('Configure a Evolution API nas Configurações.');return;}
+  fetch(`${evoUrl}/message/sendText/${evoInst}`,{method:'POST',headers:{'Content-Type':'application/json','apikey':evoKey},body:JSON.stringify({number:c.wpp.replace(/\D/g,''),text:msg})})
+    .then(()=>alert('Mensagem enviada!'))
+    .catch(()=>alert('Erro ao enviar mensagem.'));
 }
 
-// ===== EXCLUIR =====
+// EXCLUIR
 function confirmarDel(tipo,id){
-  const msg=tipo==='cliente'?`Excluir cliente "${state.clientes.find(x=>x.id===id)?.nome}"?`:`Excluir serviço "${state.servicos.find(x=>x.id===id)?.nome}"?`;
-  document.getElementById('confirm-msg').textContent=msg;
-  state.confirmCb=()=>{
+  const nome=tipo==='cliente'?state.clientes.find(x=>x.id===id)?.nome:state.servicos.find(x=>x.id===id)?.nome;
+  document.getElementById('confirm-msg').textContent=`Excluir ${tipo} "${nome}"?`;
+  document.getElementById('confirm-btn').onclick=()=>{
     if(tipo==='cliente') state.clientes=state.clientes.filter(x=>x.id!==id);
-    if(tipo==='servico'){state.servicos=state.servicos.filter(x=>x.id!==id);state.clientes=state.clientes.filter(x=>x.servicoId!==id);}
-    saveState();
-    closeConfirm();
-    if(tipo==='cliente') renderClientes();
-    if(tipo==='servico') renderServicos();
-    renderDashboard();
+    else {state.servicos=state.servicos.filter(x=>x.id!==id);state.clientes=state.clientes.filter(x=>x.servicoId!==id);}
+    saveState(); closeConfirm();
+    tipo==='cliente'?renderCli():renderServ();
+    renderDash();
   };
-  document.getElementById('confirm-btn').onclick=state.confirmCb;
   document.getElementById('confirm-del').classList.add('open');
 }
-function closeConfirm(){document.getElementById('confirm-del').classList.remove('open');state.confirmCb=null;}
+function closeConfirm(){document.getElementById('confirm-del').classList.remove('open');}
 
-// ===== MODALS =====
-function openModal(id){document.getElementById(id).classList.add('open')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
+// MODALS — KEY FIX: só fecha ao clicar no fundo escuro, modal tem onclick stopPropagation
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(bg=>{
+  bg.addEventListener('click',function(e){if(e.target===this) this.classList.remove('open');});
+});
 
-// ===== INIT =====
-renderDashboard();
+// INIT
+renderDash();
 </script>
 </body>
 </html>
