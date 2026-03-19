@@ -1091,9 +1091,17 @@ function closeConfirm(){document.getElementById('confirm-del').classList.remove(
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 document.querySelectorAll('.modal-bg').forEach(m=>{
-  m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
+  ['mousedown','touchstart'].forEach(evt=>{
+    m.addEventListener(evt,function(e){
+      if(e.target===this) this.classList.remove('open');
+    });
+  });
   const modal=m.querySelector('.modal');
-  if(modal) modal.addEventListener('click',e=>e.stopPropagation());
+  if(modal){
+    ['mousedown','touchstart'].forEach(evt=>{
+      modal.addEventListener(evt,e=>e.stopPropagation());
+    });
+  }
 });
 
 // ===== INIT =====
